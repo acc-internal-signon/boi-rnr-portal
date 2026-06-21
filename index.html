@@ -558,7 +558,7 @@
 </head>
 <body>
 
-<!-- ═══════════════════════ LOGIN SCREEN ═══════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════ LOGIN SCREEN ═══════════════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-glow"></div>
   <div class="login-box">
@@ -573,7 +573,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════ TOPBAR ═══════════════════════════════════════════════════════════════════ -->
 <div class="topbar" id="topbar" style="display:none">
   <div class="topbar-logo">
     <div class="acc-logo">Acc<span>enture</span></div>
@@ -589,7 +589,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════════ MAIN APP ═══════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════ MAIN APP ═══════════════════════════════════════════════════════════════════ -->
 <div id="main-app">
 
   <!-- HERO -->
@@ -913,6 +913,17 @@
   </div>
 </div>
 
+<!-- MODAL: NOMINATION DETAIL -->
+<div class="modal-backdrop" id="modal-detail">
+  <div class="modal" style="max-width:620px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="margin-bottom:0">📄 Nomination Details</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-detail')">✕ Close</button>
+    </div>
+    <div id="detail-modal-body"></div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════
 //  DATA & STATE
@@ -1028,9 +1039,9 @@ function addTeamMember() {
   const div = document.createElement('div');
   div.className = 'team-member-row';
   div.id = rowId;
-  div.innerHTML = \`<input type="text" placeholder="Full Name" data-role="tm-name" />
+  div.innerHTML = `<input type="text" placeholder="Full Name" data-role="tm-name" />
     <input type="email" placeholder="email@accenture.com" data-role="tm-email" />
-    <button type="button" class="remove-member-btn" onclick="removeTeamMember('\${rowId}')" title="Remove">✕</button>\`;
+    <button type="button" class="remove-member-btn" onclick="removeTeamMember('${rowId}')" title="Remove">✕</button>`;
   document.getElementById('team-members-rows').appendChild(div);
 }
 
@@ -1462,17 +1473,6 @@ function openDetail(id) {
 // Init
 updateStats();
 </script>
-
-<!-- MODAL: NOMINATION DETAIL -->
-<div class="modal-backdrop" id="modal-detail">
-  <div class="modal" style="max-width:620px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <h3 style="margin-bottom:0">📄 Nomination Details</h3>
-      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-detail')">✕ Close</button>
-    </div>
-    <div id="detail-modal-body"></div>
-  </div>
-</div>
 
 </body>
 </html>
