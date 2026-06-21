@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Accenture BOI — Rewards & Recognition Portal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Barlow:wght@600;700;800&display=swap');
+
+  :root {
+    --acc-purple: #A100FF;
+    --acc-purple-dark: #7800C4;
+    --acc-purple-light: #C850FF;
+    --acc-purple-bg: #F5E6FF;
+    --acc-black: #0D0D0D;
+    --acc-white: #FFFFFF;
+    --acc-gray-100: #F7F7F7;
+    --acc-gray-200: #EEEEEE;
+    --acc-gray-300: #CCCCCC;
+    --acc-gray-500: #888888;
+    --acc-gray-700: #444444;
+    --acc-green: #00C48C;
+    --acc-green-bg: #E6FAF5;
+    --acc-red: #FF3B3B;
+    --acc-red-bg: #FFF0F0;
+    --acc-gold: #F5A623;
+    --acc-gold-bg: #FFF8EC;
+    --acc-blue: #0041F0;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(161,0,255,0.10);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--acc-gray-100);
+    color: var(--acc-black);
+    min-height: 100vh;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--acc-black);
+    color: white;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 32px;
+    height: 60px;
+    position: sticky; top: 0; z-index: 1000;
+    border-bottom: 3px solid var(--acc-purple);
+  }
+  .topbar-logo { display: flex; align-items: center; gap: 14px; }
+  .acc-logo {
+    font-family: 'Barlow', sans-serif;
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    color: white;
+  }
+  .acc-logo span { color: var(--acc-purple); }
+  .topbar-title {
+    font-size: 13px; font-weight: 500; color: var(--acc-gray-300);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 40px; padding: 5px 14px 5px 8px;
+    font-size: 13px; font-weight: 500;
+  }
+  .user-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--acc-purple);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: white;
+  }
+  .btn-logout {
+    background: transparent; border: 1px solid rgba(255,255,255,0.25);
+    color: white; border-radius: 6px; padding: 5px 12px;
+    font-size: 12px; cursor: pointer; font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { background: rgba(255,255,255,0.1); }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0D0D0D 0%, #1a003a 50%, #0D0D0D 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 0;
+    position: fixed; inset: 0; z-index: 2000;
+  }
+  .login-glow {
+    position: absolute; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(161,0,255,0.25) 0%, transparent 70%);
+    border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .login-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(161,0,255,0.3);
+    border-radius: 20px;
+    padding: 48px 44px;
+    width: 420px; max-width: 95vw;
+    position: relative;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 60px rgba(161,0,255,0.2);
+  }
+  .login-logo {
+    font-family: 'Barlow', sans-serif;
+    font-size: 32px; font-weight: 800;
+    color: white; text-align: center; margin-bottom: 4px;
+  }
+  .login-logo span { color: var(--acc-purple-light); }
+  .login-subtitle {
+    text-align: center; font-size: 13px; color: var(--acc-gray-300);
+    margin-bottom: 32px; letter-spacing: 0.3px;
+  }
+  .login-label { font-size: 12px; font-weight: 600; color: var(--acc-gray-300); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .login-input {
+    width: 100%; background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-sm); padding: 12px 16px;
+    color: white; font-family: inherit; font-size: 14px;
+    outline: none; transition: border-color 0.2s;
+    margin-bottom: 16px;
+  }
+  .login-input::placeholder { color: rgba(255,255,255,0.3); }
+  .login-input:focus { border-color: var(--acc-purple); }
+  .login-note {
+    font-size: 11px; color: rgba(255,255,255,0.35);
+    text-align: center; margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .btn-sso {
+    width: 100%;
+    background: linear-gradient(135deg, var(--acc-purple), var(--acc-purple-dark));
+    color: white; border: none; border-radius: var(--radius-sm);
+    padding: 14px; font-family: inherit; font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-sso:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(161,0,255,0.4); }
+  .login-error {
+    background: var(--acc-red-bg); color: var(--acc-red);
+    border-radius: 8px; padding: 10px 14px; font-size: 13px;
+    margin-bottom: 14px; display: none;
+  }
+  .sso-badge {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 16px;
+  }
+  .sso-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--acc-green); }
+
+  /* ── MAIN LAYOUT ── */
+  #main-app { display: none; flex-direction: column; min-height: 100vh; }
+
+  /* ── HERO BANNER ── */
+  .hero-banner {
+    background: linear-gradient(120deg, #0D0D0D 0%, #1a003a 60%, #0D0D0D 100%);
+    padding: 28px 40px;
+    border-bottom: 1px solid rgba(161,0,255,0.2);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .hero-title {
+    font-family: 'Barlow', sans-serif;
+    font-size: 28px; font-weight: 800; color: white;
+    letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .hero-title em { color: var(--acc-purple-light); font-style: normal; }
+  .hero-sub { font-size: 13px; color: var(--acc-gray-300); margin-top: 4px; }
+  .hero-stats { display: flex; gap: 24px; }
+  .stat-pill {
+    display: flex; flex-direction: column; align-items: center;
+    background: rgba(161,0,255,0.15); border: 1px solid rgba(161,0,255,0.3);
+    border-radius: 12px; padding: 10px 20px; min-width: 80px;
+  }
+  .stat-num { font-family: 'Barlow', sans-serif; font-size: 22px; font-weight: 700; color: white; }
+  .stat-lbl { font-size: 10px; color: var(--acc-purple-light); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: white; border-bottom: 1px solid var(--acc-gray-200);
+    display: flex; padding: 0 40px; gap: 0;
+    position: sticky; top: 60px; z-index: 900;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+  }
+  .nav-tab {
+    padding: 14px 22px; font-size: 14px; font-weight: 500;
+    color: var(--acc-gray-500); border-bottom: 3px solid transparent;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    user-select: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-tab.active { color: var(--acc-purple); border-bottom-color: var(--acc-purple); font-weight: 600; }
+  .nav-tab:hover:not(.active) { color: var(--acc-black); border-bottom-color: var(--acc-gray-200); }
+  .tab-badge {
+    background: var(--acc-purple-bg); color: var(--acc-purple);
+    border-radius: 20px; padding: 2px 8px; font-size: 11px; font-weight: 600;
+  }
+
+  /* ── PAGE CONTENT ── */
+  .page { display: none; padding: 32px 40px; }
+  .page.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  }
+  .section-title { font-family: 'Barlow', sans-serif; font-size: 22px; font-weight: 700; color: var(--acc-black); }
+  .section-desc { font-size: 13px; color: var(--acc-gray-500); margin-top: 3px; }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: white; border-radius: var(--radius);
+    border: 1px solid var(--acc-gray-200);
+    box-shadow: var(--shadow-sm); overflow: hidden;
+  }
+  .form-card-header {
+    background: linear-gradient(90deg, var(--acc-purple), var(--acc-purple-dark));
+    padding: 18px 28px; display: flex; align-items: center; gap: 12px;
+  }
+  .form-card-header h3 {
+    font-family: 'Barlow', sans-serif; font-size: 18px; font-weight: 700; color: white;
+  }
+  .form-card-header .icon {
+    width: 36px; height: 36px; background: rgba(255,255,255,0.15);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .form-body { padding: 28px; }
+
+  /* ── FORM FIELDS ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.span2 { grid-column: span 2; }
+  label {
+    font-size: 12px; font-weight: 600; color: var(--acc-gray-700);
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  label .req { color: var(--acc-purple); margin-left: 2px; }
+  input[type=text], input[type=email], textarea, select {
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    border: 1.5px solid var(--acc-gray-200); border-radius: var(--radius-sm);
+    padding: 11px 14px; background: white; color: var(--acc-black);
+    outline: none; transition: border-color 0.2s;
+    width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--acc-purple); }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  select { cursor: pointer; }
+  .hint {
+    font-size: 11px; color: var(--acc-gray-500); line-height: 1.5;
+    font-style: italic;
+  }
+  .field-hint {
+    font-size: 11px; color: var(--acc-gray-300); margin-top: 2px; font-style: italic;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 20px; border-radius: var(--radius-sm);
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.2s;
+    text-decoration: none; white-space: nowrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--acc-purple), var(--acc-purple-dark));
+    color: white;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(161,0,255,0.35); }
+  .btn-secondary {
+    background: var(--acc-gray-100); color: var(--acc-gray-700);
+    border: 1.5px solid var(--acc-gray-200);
+  }
+  .btn-secondary:hover { background: var(--acc-gray-200); }
+  .btn-danger {
+    background: var(--acc-red-bg); color: var(--acc-red);
+    border: 1.5px solid #ffcccc;
+  }
+  .btn-danger:hover { background: #ffdada; }
+  .btn-success {
+    background: var(--acc-green-bg); color: #007a5a;
+    border: 1.5px solid #b3f0df;
+  }
+  .btn-success:hover { background: #ccf5e9; }
+  .btn-gold {
+    background: var(--acc-gold-bg); color: #996600;
+    border: 1.5px solid #ffd980;
+  }
+  .btn-gold:hover { background: #fff0cc; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-lg { padding: 13px 28px; font-size: 15px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    background: var(--acc-black); color: white;
+    border-radius: var(--radius-sm); padding: 14px 20px;
+    font-size: 14px; display: none; align-items: center; gap: 10px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    max-width: 350px; border-left: 4px solid var(--acc-purple);
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from { transform: translateX(80px); opacity: 0; } }
+
+  /* ── SUBMISSIONS TABLE ── */
+  .table-container {
+    background: white; border-radius: var(--radius);
+    border: 1px solid var(--acc-gray-200); overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .table-toolbar {
+    padding: 16px 20px; border-bottom: 1px solid var(--acc-gray-200);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--acc-gray-200); border-radius: var(--radius-sm);
+    padding: 8px 14px; background: var(--acc-gray-100);
+  }
+  .search-box input {
+    border: none; background: transparent; outline: none;
+    font-size: 13px; color: var(--acc-black); width: 220px;
+    font-family: inherit; padding: 0;
+  }
+  .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: 1.5px solid var(--acc-gray-200);
+    background: white; color: var(--acc-gray-500); transition: all 0.2s;
+    font-family: inherit;
+  }
+  .filter-btn.active { background: var(--acc-purple); color: white; border-color: var(--acc-purple); }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--acc-gray-100); padding: 11px 16px;
+    text-align: left; font-size: 11px; font-weight: 600;
+    color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  td {
+    padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--acc-gray-100);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #faf5ff; }
+
+  /* ── STATUS BADGE ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .badge-pending { background: var(--acc-gold-bg); color: #996600; }
+  .badge-approved { background: var(--acc-green-bg); color: #007a5a; }
+  .badge-finalist { background: #e6f0ff; color: var(--acc-blue); }
+
+  /* ── MODAL ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 3000;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center; padding: 16px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: white; border-radius: var(--radius);
+    padding: 32px; width: 100%; max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .modal h3 {
+    font-family: 'Barlow', sans-serif; font-size: 20px; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .modal p { font-size: 13px; color: var(--acc-gray-500); margin-bottom: 20px; line-height: 1.6; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .passcode-field { position: relative; }
+  .passcode-field input { padding-right: 44px; letter-spacing: 2px; font-size: 16px; }
+  .toggle-eye {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--acc-gray-500); font-size: 16px;
+  }
+
+  /* ── FLUSH WARNING ── */
+  .flush-zone {
+    background: var(--acc-red-bg); border: 1.5px solid #ffcccc;
+    border-radius: var(--radius); padding: 20px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px; margin-top: 24px;
+  }
+  .flush-zone-left h4 { font-weight: 700; color: var(--acc-red); font-size: 15px; }
+  .flush-zone-left p { font-size: 12px; color: var(--acc-gray-500); margin-top: 4px; }
+
+  /* ── CATEGORY CARDS (award browsing) ── */
+  .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .cat-card {
+    background: white; border: 1.5px solid var(--acc-gray-200);
+    border-radius: var(--radius); padding: 18px 20px;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .cat-card:hover { border-color: var(--acc-purple); box-shadow: 0 4px 16px rgba(161,0,255,0.15); transform: translateY(-1px); }
+  .cat-card.selected { border-color: var(--acc-purple); background: var(--acc-purple-bg); }
+  .cat-icon { font-size: 26px; }
+  .cat-name { font-weight: 700; font-size: 15px; }
+  .cat-desc { font-size: 12px; color: var(--acc-gray-500); line-height: 1.5; }
+  .cat-count { font-size: 11px; color: var(--acc-purple); font-weight: 600; margin-top: 4px; }
+
+  /* ── RANK BADGE ── */
+  .rank-1 { color: #F5A623; font-weight: 700; }
+  .rank-2 { color: #8B8B8B; font-weight: 700; }
+  .rank-3 { color: #a0522d; font-weight: 700; }
+
+  /* ── TEAM MEMBERS TABLE ── */
+  .team-members-list { border: 1.5px solid var(--acc-gray-200); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 10px; }
+  .team-member-row {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    gap: 0; align-items: center;
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .team-member-row:last-child { border-bottom: none; }
+  .team-member-row input {
+    border: none; border-radius: 0;
+    border-right: 1px solid var(--acc-gray-200);
+    padding: 9px 12px; font-size: 13px; margin-bottom: 0;
+  }
+  .team-member-row input:last-of-type { border-right: none; }
+  .team-member-row input:focus { background: #faf5ff; outline: none; }
+  .remove-member-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--acc-red); font-size: 18px; padding: 8px 12px;
+    transition: background 0.15s; line-height: 1;
+  }
+  .remove-member-btn:hover { background: var(--acc-red-bg); }
+  .team-member-header {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    background: var(--acc-gray-100);
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .team-member-header span {
+    font-size: 11px; font-weight: 600; color: var(--acc-gray-500);
+    text-transform: uppercase; letter-spacing: 0.4px; padding: 7px 12px;
+  }
+  .team-member-header span:first-child { border-right: 1px solid var(--acc-gray-200); }
+
+  /* ── NOMINEE DETAIL MODAL ── */
+  .detail-section { margin-bottom: 20px; }
+  .detail-label { font-size: 11px; font-weight: 600; color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
+  .detail-value { font-size: 14px; color: var(--acc-black); line-height: 1.6; }
+  .detail-reason-box {
+    background: var(--acc-gray-100); border-left: 3px solid var(--acc-purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px; font-size: 14px; line-height: 1.7;
+    color: var(--acc-black); white-space: pre-wrap;
+  }
+  .nominee-link {
+    color: var(--acc-purple); font-weight: 700; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 2px;
+    transition: color 0.15s;
+  }
+  .nominee-link:hover { color: var(--acc-purple-dark); }
+  .detail-members-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .detail-members-table th { background: var(--acc-gray-100); padding: 7px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.3px; }
+  .detail-members-table td { padding: 8px 12px; border-bottom: 1px solid var(--acc-gray-100); }
+  .detail-members-table tr:last-child td { border-bottom: none; }
+  .action-by-badge { display:inline-flex;align-items:center;gap:6px;background:var(--acc-green-bg);color:#007a5a;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600; }
+  .rejected-by-badge { display:inline-flex;align-items:center;gap:6px;background:var(--acc-red-bg);color:var(--acc-red);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600; }
+  .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:600px){ .detail-grid { grid-template-columns:1fr; } }
+
+  /* ── TEAM MEMBERS TABLE ── */
+  .team-members-list { border: 1.5px solid var(--acc-gray-200); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 10px; }
+  .team-member-row {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    gap: 0; align-items: center;
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .team-member-row:last-child { border-bottom: none; }
+  .team-member-row input {
+    border: none; border-radius: 0;
+    border-right: 1px solid var(--acc-gray-200);
+    padding: 9px 12px; font-size: 13px;
+  }
+  .team-member-row input:last-of-type { border-right: none; }
+  .team-member-row input:focus { background: #faf5ff; }
+  .remove-member-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--acc-red); font-size: 16px; padding: 8px 12px;
+    transition: background 0.15s; line-height: 1;
+  }
+  .remove-member-btn:hover { background: var(--acc-red-bg); }
+  .team-member-header {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    background: var(--acc-gray-100);
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .team-member-header span {
+    font-size: 11px; font-weight: 600; color: var(--acc-gray-500);
+    text-transform: uppercase; letter-spacing: 0.4px; padding: 7px 12px;
+  }
+  .team-member-header span:first-child { border-right: 1px solid var(--acc-gray-200); }
+
+  /* ── DETAIL VIEW MODAL ── */
+  .detail-section { margin-bottom: 20px; }
+  .detail-label { font-size: 11px; font-weight: 600; color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+  .detail-value { font-size: 14px; color: var(--acc-black); line-height: 1.6; }
+  .detail-reason-box {
+    background: var(--acc-gray-100); border-left: 3px solid var(--acc-purple);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px; font-size: 14px; line-height: 1.7;
+    color: var(--acc-black); white-space: pre-wrap;
+  }
+  .detail-members-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .detail-members-table th { background: var(--acc-gray-100); padding: 7px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.3px; }
+  .detail-members-table td { padding: 8px 12px; border-bottom: 1px solid var(--acc-gray-100); }
+  .detail-members-table tr:last-child td { border-bottom: none; }
+  .action-by-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--acc-green-bg); color: #007a5a;
+    border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; margin-top: 4px;
+  }
+  .rejected-by-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--acc-red-bg); color: var(--acc-red);
+    border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 600; margin-top: 4px;
+  }
+
+  /* ── EDIT MODAL FORM ── */
+  .edit-form-group { margin-bottom: 14px; }
+  .edit-form-group label { font-size: 12px; font-weight: 600; color: var(--acc-gray-700); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 5px; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center; padding: 56px 20px;
+    color: var(--acc-gray-500);
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .hero-banner { padding: 18px 20px; }
+    .page { padding: 20px 16px; }
+    .nav-tabs { padding: 0 8px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.span2 { grid-column: span 1; }
+    .topbar { padding: 0 16px; }
+    .hero-stats { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════ LOGIN SCREEN ═══════════════════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-glow"></div>
+  <div class="login-box">
+    <div class="login-logo">Acc<span>enture</span></div>
+    <div class="login-subtitle">BOI Project · Rewards &amp; Recognition Portal</div>
+    <div class="login-error" id="login-error">⚠ Please enter a valid Accenture email address (e.g. name@accenture.com)</div>
+    <div class="login-label">Accenture Email Address</div>
+    <input type="email" class="login-input" id="login-email" placeholder="firstname.lastname@accenture.com" />
+    <div class="login-note">Sign in with your Accenture email. Only @accenture.com addresses are permitted.<br/>Your session is secured via SSO authentication.</div>
+    <button class="btn-sso" onclick="doLogin()">🔐 Continue with Accenture SSO</button>
+    <div class="sso-badge"><div class="sso-dot"></div> Protected by Accenture Identity &amp; Access Management</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ TOPBAR ═══════════════════════════════════════════════════════════════════ -->
+<div class="topbar" id="topbar" style="display:none">
+  <div class="topbar-logo">
+    <div class="acc-logo">Acc<span>enture</span></div>
+    <div style="width:1px;height:28px;background:rgba(255,255,255,0.2)"></div>
+    <div class="topbar-title">BOI · Rewards &amp; Recognition</div>
+  </div>
+  <div class="topbar-right">
+    <div class="user-chip">
+      <div class="user-avatar" id="user-avatar-top">?</div>
+      <span id="user-name-top">—</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Sign out</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ MAIN APP ═══════════════════════════════════════════════════════════════════ -->
+<div id="main-app">
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div>
+      <div class="hero-title">Rewards &amp; <em>Recognition</em> Portal</div>
+      <div class="hero-sub">Accenture BOI Project · Celebrate outstanding performers</div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
+      <div class="stat-pill"><div class="stat-num" id="stat-quarterly">0</div><div class="stat-lbl">Quarterly</div></div>
+      <div class="stat-pill"><div class="stat-num" id="stat-star">0</div><div class="stat-lbl">Star/Month</div></div>
+      <div class="stat-pill"><div class="stat-num" id="stat-approved">0</div><div class="stat-lbl">Approved</div></div>
+    </div>
+  </div>
+
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="showTab('quarterly')">🏆 Quarterly Awards</div>
+    <div class="nav-tab" onclick="showTab('star')">⭐ Star of the Month</div>
+    <div class="nav-tab" onclick="showTab('submissions')">📋 All Submissions <span class="tab-badge" id="badge-all">0</span></div>
+    <div class="nav-tab" onclick="showTab('admin')">⚙ Admin</div>
+  </div>
+
+  <!-- ══ PAGE: QUARTERLY AWARDS ══ -->
+  <div class="page active" id="page-quarterly">
+    <div class="section-header">
+      <div>
+        <div class="section-title">🏆 Quarterly Awards Nomination</div>
+        <div class="section-desc">Recognise a colleague who exemplified excellence this quarter</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:600;color:var(--acc-gray-700);margin-bottom:12px">Select Award Category <span style="color:var(--acc-purple)">*</span></div>
+      <div class="category-grid" id="quarterly-cats"></div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="icon">🏆</div>
+        <h3 id="q-form-title">Nomination Details</h3>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Primary Nominee Full Name <span class="req">*</span></label>
+            <input type="text" id="q-nominee-name" placeholder="First Last" />
+          </div>
+          <div class="form-group">
+            <label>Primary Nominee Email <span class="req">*</span></label>
+            <input type="email" id="q-nominee-email" placeholder="nominee@accenture.com" />
+          </div>
+
+          <!-- TEAM AWARD: extra members (shown only for team_award category) -->
+          <div class="form-group span2" id="team-award-members-section" style="display:none">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div>
+                <label style="margin-bottom:0">Additional Team Members</label>
+                <div class="field-hint" style="margin-top:2px">Add every other team member to be recognised. Each must have a unique email.</div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="addTeamMember()" style="flex-shrink:0;margin-left:12px">＋ Add Member</button>
+            </div>
+            <div class="team-members-list">
+              <div class="team-member-header">
+                <span>Full Name</span>
+                <span>Email Address</span>
+                <span style="padding:7px 10px;min-width:42px"></span>
+              </div>
+              <div id="team-members-rows">
+                <!-- rows injected by addTeamMember() -->
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Team Name <span class="req">*</span></label>
+            <input type="text" id="q-team" placeholder="Enter team name" />
+            <div class="field-hint">AMS, Data Solution, Shared Services, CIF, Other etc.</div>
+          </div>
+          <div class="form-group">
+            <label>Team Sub Name</label>
+            <input type="text" id="q-subteam" placeholder="Enter sub team name" />
+            <div class="field-hint">Data Engineering, EDL, Testing, Design, Solution Arch, Preventative Maintenance, UXP etc. Please don't mention Squad Name. Programme Name can be mentioned.</div>
+          </div>
+          <div class="form-group span2">
+            <label>Reason / Citation <span class="req">*</span></label>
+            <textarea id="q-reason" placeholder="Describe why this person/team deserves this award. Be specific about contributions, impact, and behaviours demonstrated…"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-primary btn-lg" onclick="submitNomination('quarterly')">Submit Nomination →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: STAR OF THE MONTH ══ -->
+  <div class="page" id="page-star">
+    <div class="section-header">
+      <div>
+        <div class="section-title">⭐ Star of the Month Nomination</div>
+        <div class="section-desc">Shine a spotlight on someone who went above and beyond this month</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="icon">⭐</div>
+        <h3>Star of the Month — Nomination Form</h3>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nominee Full Name <span class="req">*</span></label>
+            <input type="text" id="s-nominee-name" placeholder="First Last" />
+          </div>
+          <div class="form-group">
+            <label>Nominee Email Address <span class="req">*</span></label>
+            <input type="email" id="s-nominee-email" placeholder="nominee@accenture.com" />
+          </div>
+          <div class="form-group">
+            <label>Team Name <span class="req">*</span></label>
+            <input type="text" id="s-team" placeholder="Enter team name" />
+            <div class="field-hint">AMS, Data Solution, Shared Services, CIF, Other etc.</div>
+          </div>
+          <div class="form-group">
+            <label>Team Sub Name</label>
+            <input type="text" id="s-subteam" placeholder="Enter sub team name" />
+            <div class="field-hint">Data Engineering, EDL, Testing, Design, Solution Arch, Preventative Maintenance, UXP etc. Please don't mention Squad Name. Programme Name can be mentioned.</div>
+          </div>
+          <div class="form-group span2">
+            <label>Reason / Citation <span class="req">*</span></label>
+            <textarea id="s-reason" placeholder="Describe specific achievements, client feedback, or behaviours that made this person stand out this month…"></textarea>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-primary btn-lg" onclick="submitNomination('star')">Submit Nomination →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: ALL SUBMISSIONS ══ -->
+  <div class="page" id="page-submissions">
+    <div class="section-header">
+      <div>
+        <div class="section-title">📋 All Submissions</div>
+        <div class="section-desc">View, manage, and action all nominations across both award types</div>
+      </div>
+      <button class="btn btn-secondary" onclick="downloadExcel()">⬇ Download Excel Report</button>
+    </div>
+
+    <div class="table-container">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span style="color:var(--acc-gray-500)">🔍</span>
+          <input type="text" placeholder="Search by name, email, team…" id="search-input" oninput="renderTable()" />
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('quarterly',this)">Quarterly</button>
+          <button class="filter-btn" onclick="setFilter('star',this)">Star/Month</button>
+          <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
+          <button class="filter-btn" onclick="setFilter('approved',this)">Approved</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="submissions-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Nominee</th>
+              <th>Email</th>
+              <th>Team</th>
+              <th>Sub Team</th>
+              <th>Nominated By</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Rank</th>
+              <th>Action By</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="submissions-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: ADMIN ══ -->
+  <div class="page" id="page-admin">
+    <div class="section-header">
+      <div>
+        <div class="section-title">⚙ Admin Panel</div>
+        <div class="section-desc">Administrative controls — passcode protected</div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:20px;">
+      <h4 style="font-size:15px;font-weight:700;margin-bottom:6px">Passcode Operations</h4>
+      <p style="font-size:13px;color:var(--acc-gray-500);margin-bottom:0;line-height:1.6">Use the passcode prompt when clicking <strong>Approve</strong>, <strong>Remove from Finals</strong>, or <strong>Flush All</strong>. Passcodes are case-sensitive and must be entered exactly. For approval, you may also assign a rank to the nominee after the passcode is validated.</p>
+    </div>
+
+    <div class="flush-zone">
+      <div class="flush-zone-left">
+        <h4>⚠ Danger Zone — Flush All Entries</h4>
+        <p>Permanently deletes every submission across all categories. This cannot be undone.</p>
+      </div>
+      <button class="btn btn-danger" onclick="openFlushModal()">🗑 Flush All Entries</button>
+    </div>
+  </div>
+
+</div><!-- /main-app -->
+
+<!-- ═════════════════════ TOAST ═════════════════════ -->
+<div id="toast"></div>
+
+<!-- ═════════════════════ MODAL: PASSCODE (Approve) ═════════════════════ -->
+<div class="modal-backdrop" id="modal-approve">
+  <div class="modal">
+    <h3>🏅 Approve &amp; Finalise Nomination</h3>
+    <p>Enter the approval passcode to finalise this nomination. You may also assign a ranking. Passcode is case-sensitive.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Approval Passcode</label>
+      <input type="password" id="approve-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('approve-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="edit-form-group" style="margin-top:10px">
+      <label>Assign Rank (optional — enter a number e.g. 1, 2, 3…)</label>
+      <input type="number" id="approve-rank" placeholder="e.g. 1" min="1" step="1"
+        style="width:100%;border:1.5px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:11px 14px;font-family:inherit;font-size:15px;font-weight:600;color:var(--acc-black);outline:none;" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-approve')">Cancel</button>
+      <button class="btn btn-success" onclick="confirmApprove()">✔ Confirm Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: PASSCODE (Remove from Finals) -->
+<div class="modal-backdrop" id="modal-remove">
+  <div class="modal">
+    <h3>🚫 Remove from Finals</h3>
+    <p>Enter the removal passcode to un-approve this nomination. This will revert the status to Pending.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Removal Passcode</label>
+      <input type="password" id="remove-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('remove-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-remove')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmRemove()">Confirm Removal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: FLUSH -->
+<div class="modal-backdrop" id="modal-flush">
+  <div class="modal">
+    <h3 style="color:var(--acc-red)">⚠ Flush All Entries</h3>
+    <p>This will permanently delete <strong>all submissions</strong> across all categories and types. This action cannot be undone. Enter the flush passcode to proceed.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Flush Passcode</label>
+      <input type="password" id="flush-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('flush-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-flush')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmFlush()">Yes, Flush Everything</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: EDIT NOMINATION -->
+<div class="modal-backdrop" id="modal-edit">
+  <div class="modal" style="max-width:560px">
+    <h3>✏ Edit Nomination</h3>
+    <p>Update the details below. You can only edit your own nominations.</p>
+    <input type="hidden" id="edit-id" />
+    <div class="edit-form-group">
+      <label>Nominee Name <span class="req">*</span></label>
+      <input type="text" id="edit-name" />
+    </div>
+    <div class="edit-form-group">
+      <label>Nominee Email <span class="req">*</span></label>
+      <input type="email" id="edit-email" />
+    </div>
+    <div class="edit-form-group">
+      <label>Team Name</label>
+      <input type="text" id="edit-team" />
+      <div class="field-hint">AMS, Data Solution, Shared Services, CIF, Other etc.</div>
+    </div>
+    <div class="edit-form-group">
+      <label>Team Sub Name</label>
+      <input type="text" id="edit-subteam" />
+      <div class="field-hint">Data Engineering, EDL, Testing, Design, Solution Arch, Preventative Maintenance, UXP etc. Please don't mention Squad Name.</div>
+    </div>
+    <div class="edit-form-group">
+      <label>Reason / Citation</label>
+      <textarea id="edit-reason" rows="4"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-edit')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: DELETE CONFIRM -->
+<div class="modal-backdrop" id="modal-delete">
+  <div class="modal">
+    <h3>🗑 Delete Nomination?</h3>
+    <p>Are you sure you want to delete this nomination? This action cannot be undone.</p>
+    <input type="hidden" id="delete-id" />
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-delete')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NOMINATION DETAIL -->
+<div class="modal-backdrop" id="modal-detail">
+  <div class="modal" style="max-width:620px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="margin-bottom:0">📄 Nomination Details</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-detail')">✕ Close</button>
+    </div>
+    <div id="detail-modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  DATA & STATE
+// ══════════════════════════════════════════════
+let currentUser = null;
+let nominations = JSON.parse(localStorage.getItem('rnr_nominations') || '[]');
+let tableFilter = 'all';
+let pendingActionId = null;
+
+const QUARTERLY_CATEGORIES = [
+  { id: 'rising_star',        name: 'Rising Star',        icon: '🌟', desc: 'An employee who has shown remarkable growth and promise in their role.' },
+  { id: 'tech_star',          name: 'Tech Star',           icon: '💻', desc: 'Outstanding technical contribution, innovation, or engineering excellence.' },
+  { id: 'alchemist',          name: 'Alchemist',           icon: '⚗',  desc: 'Transforms challenges into opportunities through creative problem-solving.' },
+  { id: 'team_award',         name: 'Team Award',          icon: '👥', desc: 'A team that delivered exceptional results through outstanding collaboration.' },
+  { id: 'exemplary_leader',   name: 'Exemplary Leader',    icon: '🎯', desc: 'A leader who has driven impact, inspired their team, and led by example.' },
+  { id: 'all_stars',          name: 'All Stars',           icon: '🏆', desc: 'The all-round performer who excels across every dimension consistently.' },
+];
+
+let selectedQCategory = null;
+
+// ══════════════════════════════════════════════
+//  SAVE / LOAD
+// ══════════════════════════════════════════════
+function save() {
+  localStorage.setItem('rnr_nominations', JSON.stringify(nominations));
+  updateStats();
+}
+
+// ══════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const err = document.getElementById('login-error');
+  const re = /^[^\s@]+@accenture\.com$/i;
+  if (!re.test(email)) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  currentUser = email;
+  const parts = email.split('@')[0].split('.');
+  const displayName = parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' ');
+  document.getElementById('user-name-top').textContent = displayName;
+  document.getElementById('user-avatar-top').textContent = (parts[0][0] || '?').toUpperCase() + (parts[1] ? parts[1][0].toUpperCase() : '');
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('topbar').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('main-app').style.flexDirection = 'column';
+  buildCategoryCards();
+  renderTable();
+  updateStats();
+}
+
+document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('topbar').style.display = 'none';
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('login-email').value = '';
+}
+
+// ══════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════
+function showTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    const tabs = ['quarterly','star','submissions','admin'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  if (tab === 'submissions') renderTable();
+}
+
+// ══════════════════════════════════════════════
+//  CATEGORY CARDS
+// ══════════════════════════════════════════════
+function buildCategoryCards() {
+  const container = document.getElementById('quarterly-cats');
+  container.innerHTML = '';
+  QUARTERLY_CATEGORIES.forEach(cat => {
+    const div = document.createElement('div');
+    div.className = 'cat-card';
+    div.id = 'cat-'+cat.id;
+    const count = nominations.filter(n => n.type==='quarterly' && n.category===cat.id).length;
+    div.innerHTML = `<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-desc">${cat.desc}</div><div class="cat-count">${count} nomination${count!==1?'s':''}</div>`;
+    div.onclick = () => selectCategory(cat);
+    container.appendChild(div);
+  });
+}
+
+function selectCategory(cat) {
+  selectedQCategory = cat;
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('cat-'+cat.id).classList.add('selected');
+  document.getElementById('q-form-title').textContent = cat.icon + ' ' + cat.name + ' — Nomination';
+  // Show/hide extra members section for Team Award
+  const membersSec = document.getElementById('team-award-members-section');
+  if (cat.id === 'team_award') {
+    membersSec.style.display = 'block';
+    if (document.getElementById('team-members-rows').children.length === 0) addTeamMember();
+  } else {
+    membersSec.style.display = 'none';
+    document.getElementById('team-members-rows').innerHTML = '';
+  }
+  document.getElementById('page-quarterly').querySelector('.form-card').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+let memberRowId = 0;
+function addTeamMember() {
+  memberRowId++;
+  const rowId = 'tmr-' + memberRowId;
+  const div = document.createElement('div');
+  div.className = 'team-member-row';
+  div.id = rowId;
+  div.innerHTML = `<input type="text" placeholder="Full Name" data-role="tm-name" />
+    <input type="email" placeholder="email@accenture.com" data-role="tm-email" />
+    <button type="button" class="remove-member-btn" onclick="removeTeamMember('${rowId}')" title="Remove">✕</button>`;
+  document.getElementById('team-members-rows').appendChild(div);
+}
+
+function removeTeamMember(rowId) {
+  const el = document.getElementById(rowId);
+  if (el) el.remove();
+}
+
+function getTeamMembers() {
+  const rows = document.querySelectorAll('#team-members-rows .team-member-row');
+  const members = [];
+  for (const row of rows) {
+    const name = row.querySelector('[data-role="tm-name"]').value.trim();
+    const email = row.querySelector('[data-role="tm-email"]').value.trim().toLowerCase();
+    if (name || email) members.push({ name, email });
+  }
+  return members;
+}
+
+// ══════════════════════════════════════════════
+//  SUBMIT NOMINATION
+// ══════════════════════════════════════════════
+function submitNomination(type) {
+  const prefix = type === 'quarterly' ? 'q' : 's';
+  const name  = document.getElementById(prefix+'-nominee-name').value.trim();
+  const email = document.getElementById(prefix+'-nominee-email').value.trim().toLowerCase();
+  const team  = document.getElementById(prefix+'-team').value.trim();
+  const sub   = document.getElementById(prefix+'-subteam').value.trim();
+  const reason= document.getElementById(prefix+'-reason').value.trim();
+
+  if (type === 'quarterly' && !selectedQCategory) { toast('⚠ Please select an award category first.', 'warn'); return; }
+  if (!name) { toast('⚠ Nominee name is required.', 'warn'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('⚠ Enter a valid nominee email.', 'warn'); return; }
+  if (!team) { toast('⚠ Team name is required.', 'warn'); return; }
+  if (!reason) { toast('⚠ Please provide a reason/citation.', 'warn'); return; }
+
+  const category = type === 'quarterly' ? selectedQCategory.id : 'star_of_month';
+
+  // Duplicate email check for same category
+  const dup = nominations.find(n => n.type===type && n.category===category && n.nomineeEmail===email);
+  if (dup) { toast(`⚠ ${email} has already been nominated in this category.`, 'warn'); return; }
+
+  // Validate team members for Team Award
+  let teamMembers = [];
+  if (type === 'quarterly' && selectedQCategory && selectedQCategory.id === 'team_award') {
+    teamMembers = getTeamMembers();
+    for (const m of teamMembers) {
+      if (m.name && !m.email) { toast('⚠ Please add an email for each team member.', 'warn'); return; }
+      if (m.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email)) { toast('⚠ Invalid email for team member: ' + m.name, 'warn'); return; }
+    }
+    // Dup check within member list
+    const allEmails = [email, ...teamMembers.map(m=>m.email).filter(Boolean)];
+    const dupInternal = allEmails.find((e,i) => allEmails.indexOf(e) !== i);
+    if (dupInternal) { toast('⚠ Duplicate email in team list: ' + dupInternal, 'warn'); return; }
+  }
+
+  const rec = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    type,
+    category,
+    categoryLabel: type === 'quarterly' ? selectedQCategory.name : 'Star of the Month',
+    nomineeName: name,
+    nomineeEmail: email,
+    teamMembers,
+    team, subTeam: sub,
+    reason,
+    nominatedBy: currentUser,
+    date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    status: 'pending',
+    rank: '',
+    approvedBy: '', removedBy: ''
+  };
+
+  nominations.push(rec);
+  save();
+  buildCategoryCards();
+
+  // Reset form
+  ['nominee-name','nominee-email','team','subteam','reason'].forEach(f => {
+    document.getElementById(prefix+'-'+f).value = '';
+  });
+  if (type === 'quarterly') {
+    selectedQCategory = null;
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('q-form-title').textContent = 'Nomination Details';
+    document.getElementById('team-award-members-section').style.display = 'none';
+    document.getElementById('team-members-rows').innerHTML = '';
+  }
+
+  toast('✅ Nomination submitted successfully!', 'success');
+}
+
+// ══════════════════════════════════════════════
+//  TABLE RENDER
+// ══════════════════════════════════════════════
+function setFilter(f, btn) {
+  tableFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let rows = nominations.filter(n => {
+    if (tableFilter === 'quarterly') return n.type === 'quarterly';
+    if (tableFilter === 'star') return n.type === 'star';
+    if (tableFilter === 'pending') return n.status === 'pending';
+    if (tableFilter === 'approved') return n.status === 'approved';
+    return true;
+  });
+  if (q) rows = rows.filter(n =>
+    n.nomineeName.toLowerCase().includes(q) ||
+    n.nomineeEmail.toLowerCase().includes(q) ||
+    n.team.toLowerCase().includes(q) ||
+    n.nominatedBy.toLowerCase().includes(q) ||
+    n.categoryLabel.toLowerCase().includes(q)
+  );
+
+  const tbody = document.getElementById('submissions-tbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="13"><div class="empty-state"><div class="empty-icon">📭</div><p>No submissions match your filter.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map((n,i) => {
+    const isOwner = n.nominatedBy === currentUser;
+    const isApproved = n.status === 'approved';
+    const rankLabel = n.rank ? ['🥇','🥈','🥉'][n.rank-1] + ' #'+n.rank : '—';
+    const rankClass = n.rank ? 'rank-'+n.rank : '';
+    return `<tr>
+      <td style="color:var(--acc-gray-500);font-size:12px">${i+1}</td>
+      <td><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:${n.type==='quarterly'?'#f0e6ff':'#fff8e0'};color:${n.type==='quarterly'?'var(--acc-purple)':'#996600'};font-weight:600">${n.type==='quarterly'?'Quarterly':'Star/Month'}</span></td>
+      <td style="font-weight:500;font-size:13px">${n.categoryLabel}</td>
+      <td><span class="nominee-link" onclick="openDetail('${n.id}')">${n.nomineeName}</span></td>
+      <td style="font-size:12px;color:var(--acc-gray-500)">${n.nomineeEmail}</td>
+      <td>${n.team}</td>
+      <td style="font-size:12px;color:var(--acc-gray-500)">${n.subTeam||'—'}</td>
+      <td style="font-size:12px;color:var(--acc-gray-500)">${n.nominatedBy}</td>
+      <td style="font-size:12px;color:var(--acc-gray-500);white-space:nowrap">${n.date}</td>
+      <td><span class="badge badge-${n.status==='approved'?'approved':'pending'}">${n.status==='approved'?'✔ Approved':'⏳ Pending'}</span></td>
+      <td class="${rankClass}" style="font-size:13px;text-align:center">${rankLabel}</td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${isOwner && !isApproved ? `<button class="btn btn-secondary btn-sm" onclick="openEdit('${n.id}')">✏ Edit</button>` : ''}
+          ${isOwner && !isApproved ? `<button class="btn btn-danger btn-sm" onclick="openDelete('${n.id}')">🗑</button>` : ''}
+          ${!isApproved ? `<button class="btn btn-gold btn-sm" onclick="openApprove('${n.id}')">✔ Approve</button>` : ''}
+          ${isApproved ? `<button class="btn btn-danger btn-sm" onclick="openRemove('${n.id}')">✖ Remove</button>` : ''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  MODALS — APPROVE
+// ══════════════════════════════════════════════
+function openApprove(id) {
+  pendingActionId = id;
+  document.getElementById('approve-code').value = '';
+  document.getElementById('approve-rank').value = '';
+  openModal('modal-approve');
+}
+
+function confirmApprove() {
+  const code = document.getElementById('approve-code').value;
+  if (code !== 'Aprv_the_Awrd') { toast('✖ Incorrect passcode.', 'error'); return; }
+  const rankVal = document.getElementById('approve-rank').value.trim();
+  const rankNum = rankVal !== '' ? parseInt(rankVal, 10) : '';
+  if (rankVal !== '' && (isNaN(rankNum) || rankNum < 1)) { toast('⚠ Rank must be a positive integer.', 'warn'); return; }
+  const idx = nominations.findIndex(n => n.id === pendingActionId);
+  if (idx === -1) return;
+  nominations[idx].status = 'approved';
+  nominations[idx].rank = rankVal !== '' ? rankNum : '';
+  nominations[idx].approvedBy = currentUser;
+  nominations[idx].approvedAt = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  nominations[idx].removedBy = '';
+  save(); renderTable();
+  closeModal('modal-approve');
+  toast('✅ Nomination approved and finalised!', 'success');
+}
+
+// ══════════════════════════════════════════════
+//  MODALS — REMOVE
+// ══════════════════════════════════════════════
+function openRemove(id) {
+  pendingActionId = id;
+  document.getElementById('remove-code').value = '';
+  openModal('modal-remove');
+}
+
+function confirmRemove() {
+  const code = document.getElementById('remove-code').value;
+  if (code !== 'Yes_Rmv_the_Awrd') { toast('✖ Incorrect passcode.', 'error'); return; }
+  const idx = nominations.findIndex(n => n.id === pendingActionId);
+  if (idx === -1) return;
+  nominations[idx].status = 'pending';
+  nominations[idx].rank = '';
+  nominations[idx].approvedBy = '';
+  nominations[idx].removedBy = currentUser;
+  nominations[idx].removedAt = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  save(); renderTable();
+  closeModal('modal-remove');
+  toast('⚠ Nomination removed from finals.', 'warn');
+}
+
+// ══════════════════════════════════════════════
+//  MODALS — FLUSH
+// ══════════════════════════════════════════════
+function openFlushModal() { document.getElementById('flush-code').value = ''; openModal('modal-flush'); }
+
+function confirmFlush() {
+  const code = document.getElementById('flush-code').value;
+  if (code !== 'Yes_Flsh_Al') { toast('✖ Incorrect passcode.', 'error'); return; }
+  nominations = [];
+  save(); buildCategoryCards(); renderTable();
+  closeModal('modal-flush');
+  toast('🗑 All entries have been flushed.', 'warn');
+}
+
+// ══════════════════════════════════════════════
+//  MODALS — EDIT
+// ══════════════════════════════════════════════
+function openEdit(id) {
+  const n = nominations.find(x => x.id === id);
+  if (!n || n.nominatedBy !== currentUser) { toast('✖ You can only edit your own nominations.', 'error'); return; }
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-name').value = n.nomineeName;
+  document.getElementById('edit-email').value = n.nomineeEmail;
+  document.getElementById('edit-team').value = n.team;
+  document.getElementById('edit-subteam').value = n.subTeam || '';
+  document.getElementById('edit-reason').value = n.reason;
+  openModal('modal-edit');
+}
+
+function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  const name = document.getElementById('edit-name').value.trim();
+  const email = document.getElementById('edit-email').value.trim().toLowerCase();
+  if (!name || !email) { toast('⚠ Name and email are required.', 'warn'); return; }
+  const idx = nominations.findIndex(n => n.id === id);
+  if (idx === -1) return;
+  const n = nominations[idx];
+
+  // Dup check (excluding self)
+  const dup = nominations.find(x => x.id !== id && x.type===n.type && x.category===n.category && x.nomineeEmail===email);
+  if (dup) { toast(`⚠ ${email} is already nominated in this category.`, 'warn'); return; }
+
+  n.nomineeName = name;
+  n.nomineeEmail = email;
+  n.team = document.getElementById('edit-team').value.trim();
+  n.subTeam = document.getElementById('edit-subteam').value.trim();
+  n.reason = document.getElementById('edit-reason').value.trim();
+  save(); renderTable();
+  closeModal('modal-edit');
+  toast('✅ Nomination updated.', 'success');
+}
+
+// ══════════════════════════════════════════════
+//  MODALS — DELETE
+// ══════════════════════════════════════════════
+function openDelete(id) {
+  const n = nominations.find(x => x.id === id);
+  if (!n || n.nominatedBy !== currentUser) { toast('✖ You can only delete your own nominations.', 'error'); return; }
+  pendingActionId = id;
+  document.getElementById('delete-id').value = id;
+  openModal('modal-delete');
+}
+
+function confirmDelete() {
+  const id = document.getElementById('delete-id').value;
+  nominations = nominations.filter(n => n.id !== id);
+  save(); buildCategoryCards(); renderTable();
+  closeModal('modal-delete');
+  toast('🗑 Nomination deleted.', 'warn');
+}
+
+// ══════════════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+});
+
+function toggleEye(inputId, btn) {
+  const inp = document.getElementById(inputId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+let toastTimer;
+function toast(msg, type='info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderLeftColor = type==='success'?'var(--acc-green)':type==='error'||type==='warn'?'var(--acc-red)':'var(--acc-purple)';
+  el.style.display = 'flex';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.style.display='none'; }, 3500);
+}
+
+// ══════════════════════════════════════════════
+//  STATS
+// ══════════════════════════════════════════════
+function updateStats() {
+  document.getElementById('stat-total').textContent = nominations.length;
+  document.getElementById('stat-quarterly').textContent = nominations.filter(n=>n.type==='quarterly').length;
+  document.getElementById('stat-star').textContent = nominations.filter(n=>n.type==='star').length;
+  document.getElementById('stat-approved').textContent = nominations.filter(n=>n.status==='approved').length;
+  document.getElementById('badge-all').textContent = nominations.length;
+}
+
+// ══════════════════════════════════════════════
+//  DOWNLOAD EXCEL
+// ══════════════════════════════════════════════
+function downloadExcel() {
+  if (nominations.length === 0) { toast('⚠ No submissions to export.', 'warn'); return; }
+  const headers = ['Type','Category','Nominee Name','Nominee Email','Additional Members','Team','Sub Team','Nominated By','Date','Status','Rank','Approved/Removed By','Reason'];
+  const rows = nominations.map(n => {
+    const members = n.teamMembers && n.teamMembers.length ? n.teamMembers.map(m=>m.name+'<'+m.email+'>').join('; ') : '';
+    const actionBy = n.status==='approved' && n.approvedBy ? 'Approved by: '+n.approvedBy : (n.removedBy ? 'Removed by: '+n.removedBy : '');
+    return [
+      n.type==='quarterly'?'Quarterly':'Star of the Month',
+      n.categoryLabel, n.nomineeName, n.nomineeEmail,
+      members, n.team, n.subTeam||'', n.nominatedBy, n.date,
+      n.status==='approved'?'Approved':'Pending',
+      n.rank ? '#'+n.rank : '',
+      actionBy,
+      n.reason
+    ];
+  });
+
+  let csv = [headers, ...rows].map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'RnR_Nominations_Report_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('⬇ Excel report downloaded.', 'success');
+}
+
+// ══════════════════════════════════════════════
+//  DETAIL MODAL
+// ══════════════════════════════════════════════
+function openDetail(id) {
+  const n = nominations.find(x => x.id === id);
+  if (!n) return;
+  const isTeam = n.category === 'team_award';
+  const rankEmoji = ['','🥇','🥈','🥉'];
+  const rankDisplay = n.rank ? (rankEmoji[n.rank] || '') + ' Rank #' + n.rank : '—';
+
+  let membersHtml = '';
+  if (isTeam && n.teamMembers && n.teamMembers.length > 0) {
+    membersHtml = `<div class="detail-section">
+      <div class="detail-label">All Team Members</div>
+      <table class="detail-members-table">
+        <thead><tr><th>#</th><th>Name</th><th>Email</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>${n.nomineeName}</strong> <span style="font-size:11px;color:var(--acc-purple)">(Primary)</span></td><td>${n.nomineeEmail}</td></tr>
+          ${n.teamMembers.map((m,i) => `<tr><td>${i+2}</td><td>${m.name||'—'}</td><td>${m.email||'—'}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  let actionHtml = '';
+  if (n.status === 'approved' && n.approvedBy) {
+    actionHtml = `<div class="detail-section">
+      <div class="detail-label">Approved By</div>
+      <span class="action-by-badge">✔ ${n.approvedBy}</span>
+      ${n.approvedAt ? `<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${n.approvedAt}</span>` : ''}
+    </div>`;
+  } else if (n.removedBy) {
+    actionHtml = `<div class="detail-section">
+      <div class="detail-label">Removed From Finals By</div>
+      <span class="rejected-by-badge">✖ ${n.removedBy}</span>
+      ${n.removedAt ? `<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${n.removedAt}</span>` : ''}
+    </div>`;
+  }
+
+  document.getElementById('detail-modal-body').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--acc-gray-200)">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--acc-purple),var(--acc-purple-dark));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;flex-shrink:0">${n.nomineeName.charAt(0).toUpperCase()}</div>
+      <div>
+        <div style="font-family:'Barlow',sans-serif;font-size:20px;font-weight:800">${n.nomineeName}</div>
+        <div style="font-size:13px;color:var(--acc-gray-500)">${n.nomineeEmail}</div>
+        <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap">
+          <span style="font-size:11px;padding:2px 9px;border-radius:20px;background:${n.type==='quarterly'?'#f0e6ff':'#fff8e0'};color:${n.type==='quarterly'?'var(--acc-purple)':'#996600'};font-weight:700">${n.type==='quarterly'?'Quarterly':'Star of the Month'}</span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:20px;background:var(--acc-gray-200);color:var(--acc-gray-700);font-weight:600">${n.categoryLabel}</span>
+          <span class="badge badge-${n.status==='approved'?'approved':'pending'}">${n.status==='approved'?'✔ Approved':'⏳ Pending'}</span>
+        </div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-section">
+        <div class="detail-label">Team Name</div>
+        <div class="detail-value">${n.team||'—'}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Sub Team</div>
+        <div class="detail-value">${n.subTeam||'—'}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Nominated By</div>
+        <div class="detail-value">${n.nominatedBy}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Submission Date</div>
+        <div class="detail-value">${n.date}</div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Rank</div>
+        <div class="detail-value" style="font-size:15px;font-weight:700">${rankDisplay}</div>
+      </div>
+    </div>
+    ${membersHtml}
+    <div class="detail-section">
+      <div class="detail-label">Reason / Citation</div>
+      <div class="detail-reason-box">${n.reason}</div>
+    </div>
+    ${actionHtml}
+  `;
+  openModal('modal-detail');
+}
+
+// Init
+updateStats();
+</script>
+
+</body>
+</html>
