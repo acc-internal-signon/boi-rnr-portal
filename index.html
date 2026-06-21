@@ -933,6 +933,15 @@
 
 <script>
 // ══════════════════════════════════════════════
+//  SHA-256 HELPER (Web Crypto API)
+// ══════════════════════════════════════════════
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ══════════════════════════════════════════════
 //  DATA & STATE
 // ══════════════════════════════════════════════
 let currentUser = null;
@@ -1219,9 +1228,9 @@ function openApprove(id) {
   openModal('modal-approve');
 }
 
-function confirmApprove() {
+async function confirmApprove() {
   const code = document.getElementById('approve-code').value;
-  if (code !== 'Aprv_the_Awrd') { toast('✖ Incorrect passcode.', 'error'); return; }
+  if (await sha256(code) !== '1f89805230d6c188966af691fcfc6d80a945a2c2ee6e8ab4126717c6b9ec1e1b') { toast('✖ Incorrect passcode.', 'error'); return; }
   const rankVal = document.getElementById('approve-rank').value.trim();
   const rankNum = rankVal !== '' ? parseInt(rankVal, 10) : '';
   if (rankVal !== '' && (isNaN(rankNum) || rankNum < 1)) { toast('⚠ Rank must be a positive integer.', 'warn'); return; }
@@ -1246,9 +1255,9 @@ function openRemove(id) {
   openModal('modal-remove');
 }
 
-function confirmRemove() {
+async function confirmRemove() {
   const code = document.getElementById('remove-code').value;
-  if (code !== 'Yes_Rmv_the_Awrd') { toast('✖ Incorrect passcode.', 'error'); return; }
+  if (await sha256(code) !== '3f724ba0f7d563aac1af1f3a379c57930451b8c957bfc37359714e83d739a642') { toast('✖ Incorrect passcode.', 'error'); return; }
   const idx = nominations.findIndex(n => n.id === pendingActionId);
   if (idx === -1) return;
   nominations[idx].status = 'pending';
@@ -1266,9 +1275,9 @@ function confirmRemove() {
 // ══════════════════════════════════════════════
 function openFlushModal() { document.getElementById('flush-code').value = ''; openModal('modal-flush'); }
 
-function confirmFlush() {
+async function confirmFlush() {
   const code = document.getElementById('flush-code').value;
-  if (code !== 'Yes_Flsh_Al') { toast('✖ Incorrect passcode.', 'error'); return; }
+  if (await sha256(code) !== '114b7af52a223fa37e2888f6623e6b4bed32a76bd96cc3183ca6599379e4fbd7') { toast('✖ Incorrect passcode.', 'error'); return; }
   nominations = [];
   save(); buildCategoryCards(); renderTable();
   closeModal('modal-flush');
