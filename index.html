@@ -361,6 +361,7 @@
     text-align: left; font-size: 11px; font-weight: 600;
     color: var(--acc-gray-500); text-transform: uppercase; letter-spacing: 0.5px;
     border-bottom: 1px solid var(--acc-gray-200);
+    position: sticky; top: 0; z-index: 10;
   }
   td {
     padding: 10px 14px; font-size: 11px; border-bottom: 1px solid var(--acc-gray-100);
@@ -817,7 +818,8 @@
             <div class="char-counter" id="q-reason-counter">0 / 1500 characters</div>
           </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
+          <button class="btn btn-secondary btn-lg" onclick="clearForm('quarterly')">✕ Clear All</button>
           <button class="btn btn-primary btn-lg" onclick="submitNomination('quarterly')">Submit Nomination →</button>
         </div>
       </div>
@@ -870,7 +872,8 @@
             <div class="char-counter" id="s-reason-counter">0 / 1500 characters</div>
           </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
+          <button class="btn btn-secondary btn-lg" onclick="clearForm('star')">✕ Clear All</button>
           <button class="btn btn-primary btn-lg" onclick="submitNomination('star')">Submit Nomination →</button>
         </div>
       </div>
@@ -894,7 +897,10 @@
         <div class="section-title">📋 All Submissions</div>
         <div class="section-desc">View, manage, and action all nominations across both award types</div>
       </div>
-      <button class="btn btn-secondary" onclick="downloadExcel()">⬇ Download Excel Report</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-secondary" onclick="downloadExcel()">⬇ Download Excel Report</button>
+        <button class="btn btn-success" onclick="downloadApprovedExcel()">✔ Download Approved Nominations</button>
+      </div>
     </div>
 
     <div class="table-container">
@@ -912,7 +918,7 @@
           <button class="filter-btn" id="btn-clear-all-filters" onclick="clearAllFilters()" style="display:none;background:var(--acc-red-bg);color:var(--acc-red);border-color:#ffcccc">✕ Clear Filters</button>
         </div>
       </div>
-      <div style="overflow-x:auto">
+      <div id="submissions-scroll" style="overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 280px)">
         <table id="submissions-table">
           <thead>
             <tr>
@@ -972,7 +978,10 @@
             <h4 style="font-size:15px;font-weight:700;margin-bottom:4px">👥 User Management</h4>
             <p style="font-size:13px;color:var(--acc-gray-500);margin:0">Register new users and manage existing accounts. Only registered @accenture.com users can log in.</p>
           </div>
-          <button class="btn btn-primary" onclick="openAddUserModal()">＋ Register New User</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="btn btn-secondary" onclick="downloadUsersList()">⬇ Download Users List</button>
+            <button class="btn btn-primary" onclick="openAddUserModal()">＋ Register New User</button>
+          </div>
         </div>
         <div id="users-table-wrap">
           <div style="padding:10px 0 12px 0">
@@ -1230,14 +1239,10 @@
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
               <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">B</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Edit a User</strong> — In the user table, click <em>Edit</em> next to any user to update their name, email, role, or reset their password. Use the search box above the table to quickly find a specific user.</p>
-            </div>
-            <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">C</span>
               <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Delete a User</strong> — Click <em>Delete</em> to permanently remove a user account. This prevents them from logging in. Their past nominations are unaffected.</p>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">D</span>
+              <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">C</span>
               <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Reset a User's Password</strong> — From the Edit User modal, use the <em>Reset Password</em> option to set a new password for the user. Communicate the new password to them directly and securely.</p>
             </div>
           </div>
@@ -2103,6 +2108,24 @@ async function submitNomination(type) {
   }
 }
 
+function clearForm(type) {
+  const prefix = type === 'quarterly' ? 'q' : 's';
+  ['nominee-name','nominee-email','team','subteam','reason'].forEach(f => {
+    const el = document.getElementById(prefix+'-'+f);
+    if (!el) return;
+    if (el.tagName === 'SELECT') { el.selectedIndex = 0; } else { el.value = ''; }
+  });
+  if (type === 'quarterly') {
+    selectedQCategory = null;
+    document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('q-form-title').textContent = 'Nomination Details';
+    document.getElementById('team-award-members-section').style.display = 'none';
+    document.getElementById('team-members-rows').innerHTML = '';
+  }
+  updateCharCount(prefix+'-reason', prefix+'-reason-counter');
+  toast('✔ Form cleared.', 'success');
+}
+
 // ══════════════════════════════════════════════════════════════════
 //  TABLE — FILTER & RENDER (unchanged logic, same as original)
 // ══════════════════════════════════════════════════════════════════
@@ -2143,16 +2166,35 @@ function toggleFilter(e, col) {
   openFilterPanel(col, e.currentTarget);
 }
 
+let _filterScrollEl = null;
+let _filterBtnEl = null;
+
+function positionFilterPanel(panel, btnEl) {
+  const rect = btnEl.getBoundingClientRect();
+  panel.style.top  = (rect.bottom + 4) + 'px';
+  panel.style.left = Math.min(rect.left, window.innerWidth - 210) + 'px';
+}
+
+function _onTableScroll() { closeFilterPanel(); }
+
 function openFilterPanel(col, btnEl) {
   const panel = document.getElementById('excel-filter-panel');
   document.getElementById('efp-search-input').value = '';
   const allVals = [...new Set(nominations.map(n => getColValue(n, col)))].sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
   const selected = colFilters[col] || new Set();
   renderEfpList(col, allVals, selected, '');
-  const rect = btnEl.getBoundingClientRect();
-  panel.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-  panel.style.left = Math.min(rect.left + window.scrollX, window.innerWidth - 210) + 'px';
+  _filterBtnEl = btnEl;
+  positionFilterPanel(panel, btnEl);
   panel.classList.add('open');
+
+  // Always detach first, then re-attach — guarantees exactly one listener active
+  const scrollEl = document.getElementById('submissions-scroll');
+  if (scrollEl) {
+    scrollEl.removeEventListener('scroll', _onTableScroll);
+    scrollEl.addEventListener('scroll', _onTableScroll);
+  }
+  _filterScrollEl = scrollEl;
+
   setTimeout(() => { document.addEventListener('click', outsideFilterClick, {once: true, capture: true}); }, 0);
 }
 
@@ -2251,7 +2293,15 @@ function updateFilterBtnState(col) {
   if (!btn) return;
   btn.classList.toggle('active', !!(colFilters[col] && colFilters[col].size > 0));
 }
-function closeFilterPanel() { panel_pendingSelection = null; document.getElementById('excel-filter-panel').classList.remove('open'); activeFilterCol = null; }
+function closeFilterPanel() {
+  panel_pendingSelection = null;
+  document.getElementById('excel-filter-panel').classList.remove('open');
+  activeFilterCol = null;
+  const scrollEl = document.getElementById('submissions-scroll');
+  if (scrollEl) scrollEl.removeEventListener('scroll', _onTableScroll);
+  _filterScrollEl = null;
+  _filterBtnEl = null;
+}
 
 function toggleSort(col) {
   if (sortCol === col) {
@@ -2538,6 +2588,42 @@ function downloadExcel() {
   a.href = url; a.download = 'RnR_Nominations_'+new Date().toISOString().slice(0,10)+'.csv';
   a.click(); URL.revokeObjectURL(url);
   toast('⬇ Report downloaded.', 'success');
+}
+
+function downloadApprovedExcel() {
+  const approved = nominations.filter(n => n.status === 'approved');
+  if (!approved.length) { toast('⚠ No approved nominations to export.', 'warn'); return; }
+  const headers = ['Type','Category','Nominee Name','Nominee Email','Additional Members','Team','Sub Team','Nominated By','Date','Rank','Approved By','Reason'];
+  const rows = approved.map(n => {
+    const members = n.teamMembers && n.teamMembers.length ? n.teamMembers.map(m=>m.name+'<'+m.email+'>').join('; ') : '';
+    const approvedBy = n.approvedBy ? n.approvedBy : '';
+    return [n.type==='quarterly'?'Quarterly':'Star of the Month', n.categoryLabel, n.nomineeName, n.nomineeEmail, members, n.team, n.subTeam||'', n.nominatedBy, n.date, n.rank?'#'+n.rank:'', approvedBy, n.reason];
+  });
+  const csv = [headers,...rows].map(r => r.map(c=>'\"'+String(c).replace(/"/g,'\"\"')+'\"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'RnR_Approved_Nominations_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('✔ Approved nominations downloaded.', 'success');
+}
+
+function downloadUsersList() {
+  if (!registeredUsers || !registeredUsers.length) { toast('⚠ No users to export.', 'warn'); return; }
+  const headers = ['Name', 'Email', 'Role', 'Registered'];
+  const rows = registeredUsers.map(u => [
+    u.name || '',
+    u.email || '',
+    u.role ? (u.role.charAt(0).toUpperCase() + u.role.slice(1)) : 'User',
+    u.registeredAt ? formatDateOnly(u.registeredAt) : '—'
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'RnR_Users_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('⬇ Users list downloaded.', 'success');
 }
 
 // ══════════════════════════════════════════════════════════════════
