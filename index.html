@@ -405,6 +405,66 @@
     background: none; border: none; cursor: pointer; color: var(--acc-gray-500); font-size: 16px;
   }
 
+  /* ── PHOTO UPLOAD ── */
+  .photo-upload-zone {
+    border: 2px dashed var(--acc-gray-300);
+    border-radius: var(--radius-sm);
+    padding: 18px 16px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; transition: all 0.2s;
+    background: var(--acc-gray-100);
+    position: relative;
+  }
+  .photo-upload-zone:hover, .photo-upload-zone.dragover {
+    border-color: var(--acc-purple);
+    background: var(--acc-purple-bg);
+  }
+  .photo-upload-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    border: none; padding: 0;
+  }
+  .photo-upload-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: white; border: 2px solid var(--acc-gray-200);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0; overflow: hidden;
+  }
+  .photo-upload-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .photo-upload-text { flex: 1; }
+  .photo-upload-text strong { font-size: 13px; font-weight: 600; color: var(--acc-black); display: block; }
+  .photo-upload-text span { font-size: 11px; color: var(--acc-gray-500); }
+  .photo-upload-clear {
+    background: var(--acc-red-bg); color: var(--acc-red);
+    border: 1.5px solid #ffcccc; border-radius: var(--radius-sm);
+    padding: 4px 10px; font-size: 11px; font-weight: 600;
+    cursor: pointer; font-family: inherit; white-space: nowrap;
+    display: none; z-index: 2; position: relative;
+  }
+  .photo-upload-clear:hover { background: #ffdada; }
+  .photo-preview-thumb {
+    width: 72px; height: 72px; border-radius: 50%;
+    object-fit: cover; border: 3px solid var(--acc-purple);
+    flex-shrink: 0;
+  }
+
+  /* ── DETAIL PHOTO ── */
+  .detail-photo-wrap {
+    display: flex; justify-content: center; margin-bottom: 18px;
+  }
+  .detail-photo-img {
+    width: 100px; height: 100px; border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--acc-purple);
+    box-shadow: 0 4px 20px rgba(161,0,255,0.25);
+  }
+
+  /* ── PHOTO INDICATOR IN TABLE ── */
+  .photo-dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--acc-purple); margin-left: 5px; vertical-align: middle;
+    title: "Has photo";
+  }
+
   /* ── FLUSH WARNING ── */
   .flush-zone {
     background: var(--acc-red-bg); border: 1.5px solid #ffcccc;
@@ -817,6 +877,18 @@
             <textarea id="q-reason" maxlength="1500" placeholder="Describe why this person/team deserves this award. Be specific about contributions, impact, and behaviours demonstrated…" oninput="updateCharCount('q-reason','q-reason-counter')"></textarea>
             <div class="char-counter" id="q-reason-counter">0 / 1500 characters</div>
           </div>
+          <div class="form-group span2">
+            <label>Nominee Photograph <span style="font-size:11px;font-weight:400;color:var(--acc-gray-500);text-transform:none;letter-spacing:0">(Optional — .jpg only, max 1 MB)</span></label>
+            <div class="photo-upload-zone" id="q-photo-zone" ondragover="photoDragOver(event,'q')" ondragleave="photoDragLeave(event,'q')" ondrop="photoDrop(event,'q')">
+              <input type="file" id="q-photo-input" accept=".jpg,.jpeg,image/jpeg" onchange="photoSelected(event,'q')" />
+              <div class="photo-upload-icon" id="q-photo-icon">📷</div>
+              <div class="photo-upload-text">
+                <strong id="q-photo-label">Click or drag & drop a .jpg photo</strong>
+                <span>Max 1 MB · .jpg format only · Optional</span>
+              </div>
+              <button type="button" class="photo-upload-clear" id="q-photo-clear" onclick="clearPhoto(event,'q')">✕ Remove</button>
+            </div>
+          </div>
         </div>
         <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
           <button class="btn btn-secondary btn-lg" onclick="clearForm('quarterly')">✕ Clear All</button>
@@ -870,6 +942,18 @@
             <label>Reason / Citation <span class="req">*</span></label>
             <textarea id="s-reason" maxlength="1500" placeholder="Describe specific achievements, client feedback, or behaviours that made this person stand out this month…" oninput="updateCharCount('s-reason','s-reason-counter')"></textarea>
             <div class="char-counter" id="s-reason-counter">0 / 1500 characters</div>
+          </div>
+          <div class="form-group span2">
+            <label>Nominee Photograph <span style="font-size:11px;font-weight:400;color:var(--acc-gray-500);text-transform:none;letter-spacing:0">(Optional — .jpg only, max 1 MB)</span></label>
+            <div class="photo-upload-zone" id="s-photo-zone" ondragover="photoDragOver(event,'s')" ondragleave="photoDragLeave(event,'s')" ondrop="photoDrop(event,'s')">
+              <input type="file" id="s-photo-input" accept=".jpg,.jpeg,image/jpeg" onchange="photoSelected(event,'s')" />
+              <div class="photo-upload-icon" id="s-photo-icon">📷</div>
+              <div class="photo-upload-text">
+                <strong id="s-photo-label">Click or drag & drop a .jpg photo</strong>
+                <span>Max 1 MB · .jpg format only · Optional</span>
+              </div>
+              <button type="button" class="photo-upload-clear" id="s-photo-clear" onclick="clearPhoto(event,'s')">✕ Remove</button>
+            </div>
           </div>
         </div>
         <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
@@ -1789,7 +1873,7 @@ async function loadNominationsFromSheet() {
   try {
     const res = await gasCall({ action: 'getNominations' });
     if (res.success) {
-      nominations = (res.data || []).map(n => ({ ...n, date: formatDateOnly(n.date) }));
+      nominations = (res.data || []).map(n => ({ ...n, date: formatDateOnly(n.date), photoData: n.photoData || '' }));
       buildCategoryCards();
       renderTable();
       updateStats();
@@ -1995,12 +2079,18 @@ function showTab(tab) {
 function buildCategoryCards() {
   const container = document.getElementById('quarterly-cats');
   container.innerHTML = '';
+  const isAdmin = currentUser && currentUser.role === 'admin';
   QUARTERLY_CATEGORIES.forEach(cat => {
+    // All Stars is Admin-only: hide entirely for non-admin users
+    if (cat.id === 'all_stars' && !isAdmin) return;
     const div = document.createElement('div');
     div.className = 'cat-card';
     div.id = 'cat-'+cat.id;
     const count = nominations.filter(n => n.type==='quarterly' && n.category===cat.id).length;
-    div.innerHTML = `<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-desc">${cat.desc}</div><div class="cat-count">${count} nomination${count!==1?'s':''}</div>`;
+    const adminBadge = (cat.id === 'all_stars' && isAdmin)
+      ? `<div style="margin-top:6px;display:inline-block;font-size:10px;font-weight:700;color:#7800C4;background:#f0e6ff;border:1px solid #d4a0ff;border-radius:20px;padding:2px 9px;letter-spacing:0.4px;text-transform:uppercase">🔒 Admin Only</div>`
+      : '';
+    div.innerHTML = `<div class="cat-icon">${cat.icon}</div><div class="cat-name">${cat.name}</div><div class="cat-desc">${cat.desc}</div>${adminBadge}<div class="cat-count">${count} nomination${count!==1?'s':''}</div>`;
     div.onclick = () => selectCategory(cat);
     container.appendChild(div);
   });
@@ -2058,6 +2148,10 @@ async function submitNomination(type) {
   const reason = document.getElementById(prefix+'-reason').value.trim();
 
   if (type === 'quarterly' && !selectedQCategory) { toast('⚠ Please select an award category first.', 'warn'); return; }
+  // All Stars is Admin-only — block submission for non-admin users
+  if (type === 'quarterly' && selectedQCategory && selectedQCategory.id === 'all_stars' && !(currentUser && currentUser.role === 'admin')) {
+    toast('⛔ The All Stars award can only be submitted by an Admin.', 'error'); return;
+  }
   if (!name) { toast('⚠ Nominee name is required.', 'warn'); return; }
   if (name.length > 45) { toast('⚠ Nominee name must not exceed 45 characters.', 'warn'); return; }
   if (!email || !/^[^\s@]+@accenture\.com$/i.test(email)) { toast('⚠ Nominee email must be an @accenture.com address.', 'warn'); return; }
@@ -2066,8 +2160,25 @@ async function submitNomination(type) {
   if (reason.length > 1500) { toast('⚠ Reason/Citation must not exceed 1500 characters.', 'warn'); return; }
 
   const category = type === 'quarterly' ? selectedQCategory.id : 'star_of_month';
-  const dup = nominations.find(n => n.type===type && n.category===category && n.nomineeEmail===email);
-  if (dup) { toast('⚠ ' + email + ' has already been nominated in this category.', 'warn'); return; }
+
+  // Month-aware duplicate check:
+  // Same person can be nominated again in a new calendar month, but NOT twice within the same month.
+  const nowDate  = new Date();
+  const nowMonth = nowDate.getMonth();   // 0-11
+  const nowYear  = nowDate.getFullYear();
+
+  const dup = nominations.find(n => {
+    if (n.type !== type || n.category !== category || n.nomineeEmail !== email) return false;
+    // Parse the stored date string (e.g. "25 Jul 2026") to extract month/year
+    const d = new Date(n.date);
+    const sameMonth = !isNaN(d) && d.getMonth() === nowMonth && d.getFullYear() === nowYear;
+    return sameMonth;
+  });
+  if (dup) {
+    const monthName = nowDate.toLocaleString('default', { month: 'long' });
+    toast(`⚠ ${email} has already been nominated in this category for ${monthName} ${nowYear}. Re-nominations are allowed from next month onwards.`, 'warn');
+    return;
+  }
 
   let teamMembers = [];
   if (type === 'quarterly' && selectedQCategory && selectedQCategory.id === 'team_award') {
@@ -2089,7 +2200,8 @@ async function submitNomination(type) {
     team, subTeam: sub, reason,
     nominatedBy: currentUser.email,
     date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
-    status: 'pending', rank: '', approvedBy: '', removedBy: ''
+    status: 'pending', rank: '', approvedBy: '', removedBy: '',
+    photoData: photoDataStore[prefix] || ''
   };
 
   await saveNomination(rec);
@@ -2099,6 +2211,7 @@ async function submitNomination(type) {
     const el = document.getElementById(prefix+'-'+f);
     if (el) el.value = '';
   });
+  resetPhotoField(prefix);
   if (type === 'quarterly') {
     selectedQCategory = null;
     document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
@@ -2122,6 +2235,7 @@ function clearForm(type) {
     document.getElementById('team-award-members-section').style.display = 'none';
     document.getElementById('team-members-rows').innerHTML = '';
   }
+  resetPhotoField(prefix);
   updateCharCount(prefix+'-reason', prefix+'-reason-counter');
   toast('✔ Form cleared.', 'success');
 }
@@ -2377,7 +2491,7 @@ function renderTable() {
       <td style="color:var(--acc-gray-500);font-size:10px">${i+1}</td>
       <td><span style="font-size:10px;padding:2px 8px;border-radius:20px;background:${n.type==='quarterly'?'#f0e6ff':'#fff8e0'};color:${n.type==='quarterly'?'var(--acc-purple)':'#996600'};font-weight:600">${n.type==='quarterly'?'Quarterly':'Star/Month'}</span></td>
       <td style="font-weight:500;font-size:11px">${n.categoryLabel}</td>
-      <td><span class="nominee-link" onclick="openDetail('${n.id}')">${n.nomineeName}</span></td>
+      <td><span class="nominee-link" onclick="openDetail('${n.id}')">${n.nomineeName}</span>${n.photoData?`<span class="photo-dot" title="Has photo attached">&#9679;</span>`:''}</td>
       <td>${n.team}</td>
       <td style="font-size:10px;color:var(--acc-gray-500)">${n.subTeam||'—'}</td>
       <td style="font-size:10px;color:var(--acc-gray-500)">${n.nominatedBy}</td>
@@ -2642,10 +2756,17 @@ function openDetail(id) {
   let actionHtml = '';
   if (n.status==='approved'&&n.approvedBy) actionHtml = `<div class="detail-section"><div class="detail-label">Approved By</div><span class="action-by-badge">✔ ${n.approvedBy}</span>${n.approvedAt?`<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${formatDateOnly(n.approvedAt)}</span>`:''}</div>`;
   else if (n.removedBy) actionHtml = `<div class="detail-section"><div class="detail-label">Rejected By</div><span class="rejected-by-badge">✖ ${n.removedBy}</span>${n.removedAt?`<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${formatDateOnly(n.removedAt)}</span>`:''}</div>`;
+  const avatarHtml = n.photoData
+    ? `<img src="${n.photoData}" alt="${n.nomineeName}" class="detail-photo-img" />`
+    : `<div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--acc-purple),var(--acc-purple-dark));display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;color:white;flex-shrink:0">${n.nomineeName.charAt(0).toUpperCase()}</div>`;
   document.getElementById('detail-modal-body').innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--acc-gray-200)">
-      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--acc-purple),var(--acc-purple-dark));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;flex-shrink:0">${n.nomineeName.charAt(0).toUpperCase()}</div>
-      <div><div style="font-family:'Barlow',sans-serif;font-size:20px;font-weight:800">${n.nomineeName}</div><div style="font-size:13px;color:var(--acc-gray-500)">${n.nomineeEmail}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--acc-gray-200)">
+      ${avatarHtml}
+      <div style="text-align:center">
+        <div style="font-family:'Barlow',sans-serif;font-size:20px;font-weight:800">${n.nomineeName}</div>
+        <div style="font-size:13px;color:var(--acc-gray-500)">${n.nomineeEmail}</div>
+        ${n.photoData?`<div style="font-size:11px;color:var(--acc-purple);margin-top:4px;font-weight:600">📷 Photograph attached</div>`:''}
+      </div>
     </div>
     <div class="detail-grid">
       <div class="detail-section"><div class="detail-label">Team</div><div class="detail-value">${n.team||'—'}</div></div>
@@ -2658,6 +2779,76 @@ function openDetail(id) {
     <div class="detail-section"><div class="detail-label">Reason / Citation</div><div class="detail-reason-box">${n.reason}</div></div>
     ${actionHtml}`;
   openModal('modal-detail');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  PHOTO UPLOAD HELPERS
+// ══════════════════════════════════════════════════════════════════
+const photoDataStore = { q: null, s: null }; // holds base64 string per form prefix
+
+function photoSelected(event, prefix) {
+  const file = event.target.files[0];
+  if (!file) return;
+  validateAndLoadPhoto(file, prefix);
+}
+
+function photoDragOver(event, prefix) {
+  event.preventDefault();
+  document.getElementById(prefix+'-photo-zone').classList.add('dragover');
+}
+function photoDragLeave(event, prefix) {
+  document.getElementById(prefix+'-photo-zone').classList.remove('dragover');
+}
+function photoDrop(event, prefix) {
+  event.preventDefault();
+  document.getElementById(prefix+'-photo-zone').classList.remove('dragover');
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  validateAndLoadPhoto(file, prefix);
+}
+
+function validateAndLoadPhoto(file, prefix) {
+  // Validate type
+  if (!file.type.match(/^image\/jpeg$/i) && !file.name.toLowerCase().endsWith('.jpg') && !file.name.toLowerCase().endsWith('.jpeg')) {
+    toast('⚠ Only .jpg files are accepted for the nominee photograph.', 'warn');
+    document.getElementById(prefix+'-photo-input').value = '';
+    return;
+  }
+  // Validate size (1 MB = 1,048,576 bytes)
+  if (file.size > 1048576) {
+    toast('⚠ Photo must be under 1 MB. Please compress or resize the image.', 'warn');
+    document.getElementById(prefix+'-photo-input').value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const base64 = e.target.result; // full data URL: "data:image/jpeg;base64,..."
+    photoDataStore[prefix] = base64;
+    // Update UI
+    const icon = document.getElementById(prefix+'-photo-icon');
+    icon.innerHTML = `<img src="${base64}" alt="preview" />`;
+    document.getElementById(prefix+'-photo-label').textContent = file.name;
+    document.getElementById(prefix+'-photo-clear').style.display = 'inline-flex';
+    document.getElementById(prefix+'-photo-zone').style.borderColor = 'var(--acc-purple)';
+    document.getElementById(prefix+'-photo-zone').style.background = 'var(--acc-purple-bg)';
+    toast('✅ Photo loaded: ' + file.name, 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearPhoto(event, prefix) {
+  event.stopPropagation();
+  photoDataStore[prefix] = null;
+  document.getElementById(prefix+'-photo-input').value = '';
+  document.getElementById(prefix+'-photo-icon').innerHTML = '📷';
+  document.getElementById(prefix+'-photo-label').textContent = 'Click or drag & drop a .jpg photo';
+  document.getElementById(prefix+'-photo-clear').style.display = 'none';
+  document.getElementById(prefix+'-photo-zone').style.borderColor = '';
+  document.getElementById(prefix+'-photo-zone').style.background = '';
+}
+
+function resetPhotoField(prefix) {
+  clearPhoto({ stopPropagation: ()=>{} }, prefix);
 }
 
 // ══════════════════════════════════════════════════════════════════
