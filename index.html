@@ -683,6 +683,28 @@
   .efp-btn-clear:hover { background: var(--acc-gray-200); }
   th { vertical-align: middle; }
 
+  /* ── CA ADDITIONAL MEMBERS (email-only rows) ── */
+  .ca-member-row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 0; align-items: center;
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .ca-member-row:last-child { border-bottom: none; }
+  .ca-member-row input {
+    border: none; border-radius: 0;
+    padding: 9px 12px; font-size: 13px; margin-bottom: 0;
+  }
+  .ca-member-row input:focus { background: #faf5ff; outline: none; }
+  .ca-member-header-email {
+    display: grid; grid-template-columns: 1fr auto;
+    background: var(--acc-gray-100);
+    border-bottom: 1px solid var(--acc-gray-200);
+  }
+  .ca-member-header-email span {
+    font-size: 11px; font-weight: 600; color: var(--acc-gray-500);
+    text-transform: uppercase; letter-spacing: 0.4px; padding: 7px 12px;
+  }
+
   /* ── EMPTY STATE ── */
   .empty-state {
     text-align: center; padding: 56px 20px;
@@ -801,6 +823,7 @@
     <div class="nav-tab active" onclick="showTab('quarterly')">🏆 Quarterly Awards</div>
     <div class="nav-tab" onclick="showTab('star')">⭐ Star of the Month</div>
     <div class="nav-tab" onclick="showTab('submissions')">📋 All Submissions <span class="tab-badge" id="badge-all">0</span></div>
+    <div class="nav-tab" onclick="showTab('appreciations')">✨ Client Appreciations <span class="tab-badge" id="badge-appreciations">0</span></div>
     <div class="nav-tab" onclick="showTab('admin')">⚙ Admin</div>
     <div class="nav-tab" onclick="showTab('howto')">📖 How-To Guide</div>
   </div>
@@ -1026,6 +1049,163 @@
     </div>
   </div>
 
+
+  <!-- ══ PAGE: CLIENT APPRECIATIONS ══ -->
+  <div class="page" id="page-appreciations">
+
+    <!-- Passcode info banner (same as All Submissions) -->
+    <div style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);padding:14px 20px;box-shadow:var(--shadow-sm);margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="font-size:18px">🔐</span>
+      <div style="flex:1;min-width:200px">
+        <span style="font-size:13px;font-weight:700;color:var(--acc-black)">Passcode Operations — </span>
+        <span style="font-size:13px;color:var(--acc-gray-500)">Use the passcode prompt when clicking <strong>Approve</strong>, <strong>Reject</strong>, or <strong>Delete</strong>. Passcodes are the same as All Submissions and are case-sensitive.</span>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <div>
+        <div class="section-title">✨ Client Appreciations</div>
+        <div class="section-desc">Log and track appreciation messages received from clients and onshore stakeholders  <br>    This will be published under a <strong>Wall of Fame</strong> every month at Accenture
+celebrating <strong>legitimate client appreciations</strong> and recognizing the exceptional contributions of team members.   </div>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <div class="icon">✨</div>
+        <h3>Client Appreciation — Entry Form</h3>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+
+          <!-- Appreciated To -->
+          <div class="form-group">
+            <label>Appreciated To <span class="req">*</span></label>
+            <input type="email" id="ca-appreciated-to" maxlength="80"
+              placeholder="The @accenture.com email of the team member who received the appreciation. No spaces allowed. Must be @accenture.com"
+              oninput="this.value=this.value.replace(/\s/g,'')" />
+            <div class="field-hint">Only @accenture.com email addresses are accepted. No spaces allowed.</div>
+          </div>
+
+          <!-- Appreciated By -->
+          <div class="form-group">
+            <label>Appreciated By <span class="req">*</span></label>
+            <input type="email" id="ca-appreciated-by" maxlength="80"
+              placeholder="The email of the client or onshore stakeholder who sent the appreciation. Must be @boi.com or @accenture.com."
+              oninput="this.value=this.value.replace(/\s/g,'')" />
+            <div class="field-hint">Only @accenture.com or @boi.com email addresses are accepted. No spaces allowed.</div>
+          </div>
+
+          <!-- Email Subject -->
+          <div class="form-group span2">
+            <label>Email Subject <span class="req">*</span></label>
+            <input type="text" id="ca-email-subject" maxlength="150"
+              placeholder="The subject line of the appreciation email received."
+              oninput="updateCharCountCA('ca-email-subject','ca-subject-counter',150)" />
+            <div class="char-counter" id="ca-subject-counter">0 / 150 characters</div>
+          </div>
+
+          <!-- Appreciation Words -->
+          <div class="form-group span2">
+            <label>Appreciation Words <span class="req">*</span></label>
+            <textarea id="ca-appreciation-words" rows="3" maxlength="300"
+              placeholder="Mention what is being written in the appreciation email."
+              oninput="updateCharCountCA('ca-appreciation-words','ca-words-counter',300)"></textarea>
+            <div class="char-counter" id="ca-words-counter">0 / 300 characters</div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group span2">
+            <label>Description <span class="req">*</span></label>
+            <textarea id="ca-description" rows="4" maxlength="800"
+              placeholder="Context about WHY the client or stakeholder gave the appreciation - what work, interaction or achievement make this appreciation possible."
+              oninput="updateCharCountCA('ca-description','ca-desc-counter',800)"></textarea>
+            <div class="char-counter" id="ca-desc-counter">0 / 800 characters</div>
+          </div>
+
+          <!-- Validator -->
+          <div class="form-group span2">
+            <label>Validator <span class="req">*</span></label>
+            <input type="email" id="ca-validator" maxlength="80"
+              placeholder="The @accenture.com email of a person who can verify the appreciation - typically someone who was copied or forwarded on the original email. This helps admins confirm authenticity before approving."
+              oninput="this.value=this.value.replace(/\s/g,'')" />
+            <div class="field-hint">Only @accenture.com email addresses are accepted. No spaces allowed.</div>
+          </div>
+
+          <!-- Additional Team Members Appreciated (Optional) -->
+          <div class="form-group span2">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div>
+                <label style="margin-bottom:0">Additional Team Members Appreciated <span style="font-size:11px;font-weight:400;color:var(--acc-gray-500);text-transform:none;letter-spacing:0">(Optional)</span></label>
+                <div class="field-hint" style="margin-top:2px">Add other @accenture.com team members who were also appreciated in this email. Email addresses only — no spaces allowed.</div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="addCAMember()" style="flex-shrink:0;margin-left:12px">＋ Add Member</button>
+            </div>
+            <div class="team-members-list" id="ca-members-list-wrap" style="display:none">
+              <div class="ca-member-header-email">
+                <span>Email Address (@accenture.com)</span>
+                <span style="padding:7px 10px;min-width:42px"></span>
+              </div>
+              <div id="ca-members-rows"></div>
+            </div>
+          </div>
+
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:8px">
+          <button class="btn btn-secondary btn-lg" onclick="clearCAForm()">✕ Clear All</button>
+          <button class="btn btn-primary btn-lg" onclick="submitAppreciation()"> Submit Appreciation →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPRECIATION LIST TABLE -->
+    <div class="section-header" style="margin-top:28px">
+      <div>
+        <div class="section-title" style="font-size:18px">📋 All Client Appreciations</div>
+        <div class="section-desc">View, manage, and action all appreciation entries</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-secondary" onclick="downloadCAExcel()">⬇ Download All Appreciations</button>
+        <button class="btn btn-success" onclick="downloadCAApprovedExcel()">✔ Download Approved Appreciations</button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <div class="table-toolbar">
+        <div class="search-box">
+          <span style="color:var(--acc-gray-500)">🔍</span>
+          <input type="text" placeholder="Search by Appreciated To, By, Subject…" id="ca-search-input" oninput="renderCATable()" />
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="setCAFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setCAFilter('pending',this)">⏳ Pending</button>
+          <button class="filter-btn" onclick="setCAFilter('approved',this)">✔ Approved</button>
+          <button id="ca-btn-clear-all-filters" class="filter-btn" onclick="clearAllCAFilters()" style="display:none;background:var(--acc-red-bg);color:var(--acc-red);border-color:#ffcccc">✕ Clear Filters</button>
+        </div>
+      </div>
+      <div id="ca-submissions-scroll" style="overflow-x:auto;overflow-y:auto;max-height:calc(100vh - 280px)">
+        <table id="ca-table">
+          <thead>
+            <tr>
+              <th><div class="th-inner"><span class="th-label">#</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Appreciated To</span><span class="sort-btn-icon" id="sbtn-ca-to" onclick="toggleCASort('ca-to')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-to" onclick="toggleCAFilter(event,'ca-to')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Appreciated By</span><span class="sort-btn-icon" id="sbtn-ca-by" onclick="toggleCASort('ca-by')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-by" onclick="toggleCAFilter(event,'ca-by')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Email Subject</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Validator</span><span class="sort-btn-icon" id="sbtn-ca-validator" onclick="toggleCASort('ca-validator')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-validator" onclick="toggleCAFilter(event,'ca-validator')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Date</span><span class="sort-btn-icon" id="sbtn-ca-date" onclick="toggleCASort('ca-date')" title="Sort">↕</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Submitted By</span><span class="sort-btn-icon" id="sbtn-ca-submitted" onclick="toggleCASort('ca-submitted')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-submitted" onclick="toggleCAFilter(event,'ca-submitted')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Status</span><span class="sort-btn-icon" id="sbtn-ca-status" onclick="toggleCASort('ca-status')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-status" onclick="toggleCAFilter(event,'ca-status')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Actions</span></div></th>
+            </tr>
+          </thead>
+          <tbody id="ca-table-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /page-appreciations -->
+
   <!-- ══ PAGE: ADMIN ══ -->
   <div class="page" id="page-admin">
     <div class="section-header">
@@ -1097,12 +1277,24 @@
         <p style="font-size:13px;color:var(--acc-gray-500);margin-bottom:0;line-height:1.6">Use the passcode prompt when clicking <strong>Approve</strong>, <strong>Remove from Finals</strong>, or <strong>Flush All</strong>. Passcodes are case-sensitive and must be entered exactly. For approval, you may also assign a rank to the nominee after the passcode is validated.</p>
       </div>
 
-      <div class="flush-zone">
-        <div class="flush-zone-left">
-          <h4>⚠ Danger Zone — Flush All Entries</h4>
-          <p>Permanently deletes every submission across all categories. This cannot be undone.</p>
+      <div class="flush-zone" style="flex-direction:column;gap:14px;align-items:stretch">
+        <div style="font-size:13px;font-weight:800;color:var(--acc-red);letter-spacing:0.3px;margin-bottom:2px">⚠ Danger Zone</div>
+        <!-- Flush Nominations -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--acc-red-bg);border:1px solid #ffcccc;border-radius:var(--radius-sm);padding:14px 18px">
+          <div class="flush-zone-left">
+            <h4>Flush All — Nominations &amp; Awards</h4>
+            <p>Permanently deletes every submission across Quarterly &amp; Star of the Month. Cannot be undone.</p>
+          </div>
+          <button class="btn btn-danger" onclick="openFlushModal()">🗑 Flush All Nominations</button>
         </div>
-        <button class="btn btn-danger" onclick="openFlushModal()">🗑 Flush All Entries</button>
+        <!-- Flush Client Appreciations -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--acc-red-bg);border:1px solid #ffcccc;border-radius:var(--radius-sm);padding:14px 18px">
+          <div class="flush-zone-left">
+            <h4>Flush All — Client Appreciations</h4>
+            <p>Permanently deletes every Client Appreciation entry. Cannot be undone.</p>
+          </div>
+          <button class="btn btn-danger" onclick="openFlushCAModal()">🗑 Flush All Appreciations</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1138,39 +1330,45 @@
       <a href="#howto-login" style="text-decoration:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">🔐 Logging In</span></a>
       <a href="#howto-nominate" style="text-decoration:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">🏆 Nominating</span></a>
       <a href="#howto-submissions" style="text-decoration:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">📋 Submissions</span></a>
+      <a href="#howto-appreciations" style="text-decoration:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">✨ Client Appreciations</span></a>
       <a href="#howto-admin" id="howto-admin-navpill" style="text-decoration:none;display:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-gray-200);color:var(--acc-gray-700);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">⚙ Admin Guide</span></a>
       <a href="#howto-faq" style="text-decoration:none"><span style="display:inline-flex;align-items:center;gap:6px;background:var(--acc-gray-200);color:var(--acc-gray-700);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600">❓ FAQs</span></a>
     </div>
 
-    <!-- ── SECTION 1: Overview ── -->
+    <!-- SECTION 1: Overview -->
     <div id="howto-overview" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
       <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🗺</div>
         <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">1 — What is This Portal?</div>
       </div>
       <div style="padding:28px">
-        <p style="font-size:14px;color:var(--acc-gray-700);line-height:1.8;margin-bottom:16px">The <strong>Accenture BOI Rewards &amp; Recognition (R&amp;R) Portal</strong> is the official platform for celebrating exceptional work within the BOI project team. It gives every team member an easy way to formally nominate colleagues who have gone above and beyond — and gives admins the tools to review, approve, and rank those nominations.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:8px">
+        <p style="font-size:14px;color:var(--acc-gray-700);line-height:1.8;margin-bottom:16px">The <strong>Accenture BOI Rewards &amp; Recognition (R&amp;R) Portal</strong> is the official platform for celebrating exceptional work within the BOI project team. It gives every team member an easy way to formally nominate colleagues who have gone above and beyond — and gives admins the tools to review, approve, and rank those nominations. It also provides a dedicated tracker for client appreciation messages received from clients and onshore stakeholders.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:8px">
           <div style="background:var(--acc-purple-bg);border-radius:var(--radius-sm);padding:16px">
             <div style="font-size:22px;margin-bottom:6px">🏆</div>
             <div style="font-size:13px;font-weight:700;color:var(--acc-purple);margin-bottom:4px">Quarterly Awards</div>
-            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">Recognise standout individual or team performance over a full quarter. Multiple categories available — Client Focus, Innovation, Collaboration, and more.</div>
+            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">Recognise standout individual or team performance over a full quarter. Six categories: Rising Star, Tech Star, Alchemist, Team Award, Exemplary Leader, and All Stars (admin-only).</div>
           </div>
           <div style="background:#FFF8EC;border-radius:var(--radius-sm);padding:16px">
             <div style="font-size:22px;margin-bottom:6px">⭐</div>
             <div style="font-size:13px;font-weight:700;color:var(--acc-gold);margin-bottom:4px">Star of the Month</div>
-            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">A monthly spotlight for someone who truly stood out — quick, impactful, and easy to submit. Great for recognising day-to-day excellence.</div>
+            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">A monthly spotlight for someone who truly stood out — quick, impactful, and easy to submit. Great for recognising day-to-day excellence without waiting for the quarterly cycle.</div>
           </div>
           <div style="background:var(--acc-green-bg);border-radius:var(--radius-sm);padding:16px">
+            <div style="font-size:22px;margin-bottom:6px">✨</div>
+            <div style="font-size:13px;font-weight:700;color:#007a5a;margin-bottom:4px">Client Appreciations</div>
+            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">Log and track appreciation emails/messages received from clients and onshore stakeholders. Each entry requires a validator who was copied or forwarded on the original email.</div>
+          </div>
+          <div style="background:var(--acc-gray-100);border-radius:var(--radius-sm);padding:16px">
             <div style="font-size:22px;margin-bottom:6px">📋</div>
-            <div style="font-size:13px;font-weight:700;color:#007a5a;margin-bottom:4px">Transparent Tracking</div>
-            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">All submissions are visible to registered users. You can view statuses (Pending / Approved), filter, search, and download reports at any time.</div>
+            <div style="font-size:13px;font-weight:700;color:var(--acc-gray-700);margin-bottom:4px">Transparent Tracking</div>
+            <div style="font-size:12px;color:var(--acc-gray-700);line-height:1.6">All submissions are visible to registered users. Filter, sort, search by any column, and download Excel reports for both nominations and appreciations at any time.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ── SECTION 2: Logging In ── -->
+    <!-- SECTION 2: Logging In -->
     <div id="howto-login" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
       <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">🔐</div>
@@ -1184,7 +1382,7 @@
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--acc-black);margin-bottom:10px;display:flex;align-items:center;gap:8px"><span style="background:var(--acc-purple);color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span> Enter your password</div>
-            <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Your initial password is set by the Admin when they register your account. You can change it at any time using the <em>"Change Password"</em> link on the login screen before signing in.</p>
+            <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Your initial password is set by the Admin when they register your account. You can change it at any time using the <em>"Change Password"</em> link below the password field on the login screen — before signing in.</p>
           </div>
         </div>
         <div style="background:var(--acc-gold-bg);border:1px solid #ffd980;border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;color:#7a5200;line-height:1.7">
@@ -1193,242 +1391,297 @@
       </div>
     </div>
 
-    <!-- ── SECTION 3: Submitting a Nomination ── -->
+    <!-- SECTION 3: Submitting a Nomination -->
     <div id="howto-nominate" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
       <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">✍️</div>
         <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">3 — Submitting a Nomination</div>
       </div>
       <div style="padding:28px">
-
-        <!-- Quarterly -->
         <div style="margin-bottom:24px">
-          <div style="font-size:15px;font-weight:700;color:var(--acc-black);margin-bottom:12px;display:flex;align-items:center;gap:8px">🏆 Quarterly Awards Nomination</div>
+          <div style="font-size:15px;font-weight:700;color:var(--acc-black);margin-bottom:12px">🏆 Quarterly Awards Nomination</div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">1</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Select a Category</strong> — Choose from the award categories displayed at the top of the Quarterly Awards tab (e.g. Client Focus, Innovation, Collaboration, Team Award, etc.). Click the category card to select it; it will highlight in purple.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Select a Category</strong> — Choose from the award category cards at the top: <em>Rising Star, Tech Star, Alchemist, Team Award, Exemplary Leader</em>. The <em>All Stars</em> category is visible to admins only. Click a card to select it — it highlights in purple.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">2</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Fill in the Nominee Details</strong> — Enter the nominee's <em>full name</em> (letters only) and their <em>@accenture.com email</em>. For <strong>Team Awards</strong>, use the primary nominee fields for the main member and click <em>"＋ Add Member"</em> to add additional team members (each needs a unique name and email).</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Fill in the Nominee Details</strong> — Enter the nominee's <em>full name</em> (letters and spaces only, max 45 chars) and their <em>@accenture.com email</em>. For <strong>Team Awards</strong>, the primary fields cover the lead member — click <em>"＋ Add Member"</em> to add additional members, each needing a unique @accenture.com email.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">3</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Team Name &amp; Sub Team</strong> — Provide the team name (e.g. AMS, Data Solution, Shared Services, CIF) and the sub-team if applicable (e.g. Data Engineering, EDL, Testing, PMO). Do <em>not</em> mention the Squad Name.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Team Name &amp; Sub Team</strong> — Select the team (AMS, Data Solutions, Shared Services, CIF, or Other) and optionally enter the sub-team (e.g. Data Engineering, EDL, Testing, Design, PMO, UXP). Do <em>not</em> enter a Squad Name in the sub-team field.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">4</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Write the Reason / Citation</strong> — This is the most important part. Describe <em>specifically</em> what the person did, the impact it had, and the behaviour they demonstrated. Be concrete and detailed. You have up to 1,500 characters. A strong citation significantly increases the chance of approval.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Add a Photograph (optional)</strong> — Click the upload zone or drag &amp; drop a <em>.jpg file under 1 MB</em>. The photo is stored with the nomination, shown in the detail view, and indicated by a purple dot (●) in the table. Only one photo per nomination.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">5</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Submit</strong> — Click <em>"Submit Nomination →"</em>. You will see a confirmation toast notification. Your submission will immediately appear in <em>All Submissions</em> with a <strong>Pending</strong> status.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Write the Reason / Citation</strong> — Describe specifically what the person did, the impact it had, and the behaviour they demonstrated. Be concrete — up to 1,500 characters (live counter shown). A strong citation significantly increases the chance of approval.</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:50%;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px">6</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Submit</strong> — Click <em>"Submit Nomination →"</em>. A toast confirms success and the nomination immediately appears in <em>All Submissions</em> as <strong>Pending</strong>. The portal blocks re-nominating the same person in the same category within the same calendar month — re-nominations are allowed from the next month onward.</p>
             </div>
           </div>
         </div>
-
         <div style="border-top:1px solid var(--acc-gray-200);margin-bottom:20px"></div>
-
-        <!-- Star of the Month -->
         <div style="margin-bottom:20px">
-          <div style="font-size:15px;font-weight:700;color:var(--acc-black);margin-bottom:12px;display:flex;align-items:center;gap:8px">⭐ Star of the Month Nomination</div>
-          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Star of the Month nominations follow the same process as above — fill in the nominee's name, email, team, sub-team, and reason — but there is <strong>no category selection</strong> required. Go to the <em>⭐ Star of the Month</em> tab and complete the form directly.</p>
+          <div style="font-size:15px;font-weight:700;color:var(--acc-black);margin-bottom:12px">⭐ Star of the Month Nomination</div>
+          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Star of the Month follows the same process — name, email, team, sub-team, optional photo, and reason — but <strong>no category selection</strong> is required. Go to the <em>⭐ Star of the Month</em> tab and fill in the form directly. The same monthly duplicate check applies.</p>
           <div style="background:var(--acc-green-bg);border:1px solid #b3f0df;border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;color:#005c42;line-height:1.7">
-            <strong>✅ Tip:</strong> Star of the Month nominations are ideal for recognising someone who made a difference right now — a great client interaction, clutch delivery, or quietly keeping things running. You don't need to wait for the quarterly cycle.
+            <strong>✅ Tip:</strong> Star of the Month is ideal for recognising someone who made a difference right now — a great client interaction, clutch delivery, or quietly keeping things running. You don't need to wait for the quarterly cycle.
           </div>
         </div>
-
         <div style="background:var(--acc-red-bg);border:1px solid #ffcccc;border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;color:#aa0000;line-height:1.7">
-          <strong>⚠ Important:</strong> You can only nominate registered @accenture.com users. Nominations are submitted under your logged-in identity. You can edit your own nominations at any time from the <em>All Submissions</em> tab as long as they are still in <strong>Pending</strong> status.
+          <strong>⚠ Important:</strong> Nominations are submitted under your logged-in identity. You can edit or delete your own Pending nominations from the <em>All Submissions</em> tab. Once approved, editing is no longer available.
         </div>
       </div>
     </div>
 
-    <!-- ── SECTION 4: All Submissions ── -->
+    <!-- SECTION 4: All Submissions -->
     <div id="howto-submissions" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
       <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">📋</div>
         <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">4 — Viewing All Submissions</div>
       </div>
       <div style="padding:28px">
-        <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:18px">The <strong>All Submissions</strong> tab is the central view of every nomination that has been submitted. All registered users can view this page. Here's what you can do:</p>
+        <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:18px">The <strong>All Submissions</strong> tab is the central view of every nomination. All registered users can view this page.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:18px">
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
             <div style="font-size:18px;margin-bottom:6px">🔍</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:4px">Search</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Type in the search box to filter nominations by nominee name instantly.</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Instantly filter nominations by nominee name, email, team, nominated-by, or category using the search box.</div>
           </div>
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
             <div style="font-size:18px;margin-bottom:6px">🎛</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Filter Buttons</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Use the quick filter buttons to view All, Quarterly only, Star/Month only, Pending only, or Approved only.</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Quick Filters</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Pill buttons above the table: All, Quarterly only, Star/Month only, Pending only, or Approved only.</div>
           </div>
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
-            <div style="font-size:18px;margin-bottom:6px">▼</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Column Filters</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Click the ▼ icon on any column header (Type, Category, Team, Status, etc.) to filter by specific values — works like an Excel filter.</div>
+            <div style="font-size:18px;margin-bottom:6px">▼ ↕</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Column Filters &amp; Sort</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Click ▼ on any column header for Excel-style multi-value filtering. Click ↕ to sort ascending/descending — a third click clears the sort.</div>
           </div>
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
-            <div style="font-size:18px;margin-bottom:6px">⬇</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Download Report</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Click <em>"⬇ Download Excel Report"</em> to export all currently visible (filtered) nominations as an Excel file.</div>
+            <div style="font-size:18px;margin-bottom:6px">⬇ ✔</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Download Reports</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6"><em>⬇ Download Excel Report</em> exports all nominations. <em>✔ Download Approved Nominations</em> exports only approved entries — both as CSV files.</div>
           </div>
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
             <div style="font-size:18px;margin-bottom:6px">👁</div>
             <div style="font-size:13px;font-weight:600;margin-bottom:4px">View Details</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Click the <em>View</em> button on any row to open the full nomination details, including the complete citation text.</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Click any nominee's name (underlined in purple) to open the full detail view — citation, photo, team members, rank, and approval info.</div>
           </div>
           <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:14px">
-            <div style="font-size:18px;margin-bottom:6px">✏️</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Edit Your Nominations</div>
-            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">You can edit nominations <em>you submitted</em> as long as they are still in Pending status. Click <em>Edit</em> on your row to make changes.</div>
+            <div style="font-size:18px;margin-bottom:6px">✏️ 🗑</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Edit / Delete</div>
+            <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Edit or delete nominations you submitted, as long as they are still Pending. Edit and Delete buttons appear only on your own rows.</div>
           </div>
         </div>
         <div style="background:var(--acc-purple-bg);border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;color:var(--acc-purple-dark);line-height:1.7">
           <strong>Status Guide — </strong>
-          <span style="background:#FFF0F0;color:var(--acc-red);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:0 4px">Pending</span> means the nomination is awaiting admin review.
-          <span style="background:var(--acc-green-bg);color:#007a5a;border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:0 4px">Approved</span> means it has been reviewed and finalised by an admin. An approved entry may also have a <strong>Rank</strong> assigned.
+          <span style="background:#FFF0F0;color:var(--acc-red);border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:0 4px">⏳ Pending</span> = awaiting admin review.
+          <span style="background:var(--acc-green-bg);color:#007a5a;border-radius:4px;padding:2px 8px;font-size:12px;font-weight:600;margin:0 4px">✔ Approved</span> = reviewed and finalised — a <strong>Rank</strong> may be assigned (🥇 🥈 🥉 for the top three). A purple dot (●) next to a name means a photo is attached.
         </div>
       </div>
     </div>
 
-    <!-- ── SECTION 5: Admin Guide ── -->
+    <!-- SECTION 5: Client Appreciations -->
+    <div id="howto-appreciations" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
+      <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">✨</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">5 — Client Appreciations</div>
+      </div>
+      <div style="padding:28px">
+        <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:18px">The <strong>✨ Client Appreciations</strong> tab logs and tracks appreciation messages received from clients and onshore stakeholders — creating a permanent, searchable record of positive feedback, separate from the awards process.</p>
+        <div style="margin-bottom:20px">
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:12px">📝 Submitting an Appreciation Entry</div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciated To</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The @accenture.com email of the team member who received the appreciation. No spaces allowed.</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciated By</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The email of the client or onshore stakeholder who sent the appreciation. Must be @accenture.com or @boi.com.</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Email Subject</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The subject line of the appreciation email (max 150 chars). Used for duplicate detection — two entries with the same subject and same Appreciated To will be blocked.</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciation Words</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The key phrase or sentence actually written about the person in the appreciation email (max 300 chars).</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Description</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Context about why the client or stakeholder gave the appreciation — what work, interaction, or achievement prompted it (max 800 chars).</p>
+            </div>
+            <div style="display:flex;gap:14px;align-items:flex-start">
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Validator</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The @accenture.com email of a person who can verify the appreciation — typically someone who was copied or forwarded on the original email. This helps admins confirm authenticity before approving.</p>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--acc-gray-200);margin-bottom:18px"></div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:10px">📊 Managing the Appreciations List</div>
+          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:12px">Below the entry form is the full appreciations list, with the same search, column filter, sort, edit, and delete capabilities as All Submissions. Two Excel download buttons appear at the top of the list:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px">
+              <div style="font-size:12px;font-weight:700;color:var(--acc-gray-700);margin-bottom:4px">⬇ Download All Appreciations</div>
+              <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Exports every entry (Pending and Approved) as CSV — for full records or reporting.</div>
+            </div>
+            <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px">
+              <div style="font-size:12px;font-weight:700;color:#007a5a;margin-bottom:4px">✔ Download Approved Appreciations</div>
+              <div style="font-size:12px;color:var(--acc-gray-500);line-height:1.6">Exports only approved entries — ideal for presentations or clean dashboards of validated appreciations.</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--acc-gold-bg);border:1px solid #ffd980;border-radius:var(--radius-sm);padding:14px 18px;font-size:13px;color:#7a5200;line-height:1.7">
+          <strong>💡 Approval &amp; Passcodes:</strong> Appreciation entries start as <em>Pending</em> and must be approved by an admin using the Approval Passcode — the same passcode used for nominations. You can edit or delete your own Pending entries. Use the ✕ button (with Deletion Passcode) to remove any entry.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: Admin Guide -->
     <div id="howto-admin" style="background:white;border-radius:var(--radius);border:1.5px solid var(--acc-purple-bg);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden;display:none">
       <div style="background:linear-gradient(90deg,#1a003a,#0D0D0D);padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(161,0,255,0.25);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">⚙</div>
         <div style="flex:1">
-          <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">5 — Admin Guide</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px">This Section is visible to Admin only & meant for Admin-role users only</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">6 — Admin Guide</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px">Visible to Admin-role users only</div>
         </div>
         <span style="background:rgba(161,0,255,0.3);color:var(--acc-purple-light);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700">🔒 Admin Only</span>
       </div>
       <div style="padding:28px">
-        <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:20px">The <strong>Admin panel</strong> is only accessible to users registered with the <em>Admin</em> role. Non-admin users will see a locked screen when visiting the Admin tab. Below is a full walkthrough of every admin function.</p>
+        <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:20px">The <strong>Admin panel</strong> is only accessible to users registered with the <em>Admin</em> role. Non-admin users will see a locked screen when visiting the Admin tab.</p>
 
-        <!-- 5a Data Sync -->
         <div style="margin-bottom:22px">
-          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px;display:flex;align-items:center;gap:8px">☁ Data Sync</div>
-          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The Data Sync panel is the first thing you'll see in the Admin tab. Use <strong>"🔄 Sync Nominations"</strong> to pull the latest nomination data from the portal backend, and <strong>"🔄 Refresh Users"</strong> to reload the user list. Always sync after onboarding new users or if you suspect the display is stale. The status line below the heading confirms the last sync result.</p>
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px">☁ Data Sync</div>
+          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Use <strong>"🔄 Sync Nominations"</strong> to pull the latest nomination data from the backend, and <strong>"🔄 Refresh Users"</strong> to reload the user list. Always sync after onboarding new users or if the display seems stale.</p>
         </div>
 
-        <!-- 5b User Management -->
         <div style="margin-bottom:22px">
-          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px;display:flex;align-items:center;gap:8px">👥 User Management</div>
-          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Manage who can access the portal. Only registered @accenture.com users can log in — no self-registration is possible.</p>
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px">👥 User Management</div>
+          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Manage who can access the portal. Only registered @accenture.com users can log in — no self-registration. Use the search box to filter the user list by name, email, or role.</p>
           <div style="display:flex;flex-direction:column;gap:9px">
             <div style="display:flex;gap:12px;align-items:flex-start">
               <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">A</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Register a New User</strong> — Click <em>"＋ Register New User"</em>, enter their Accenture email, full name, initial password, and role (User or Admin). Share the initial password securely with the new user and advise them to change it on first login.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Register a New User</strong> — Click <em>"＋ Register New User"</em>, fill in the Accenture email, full name, initial password, and role (User or Admin). Share the password securely and advise them to change it on first login.</p>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
               <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">B</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Delete a User</strong> — Click <em>Delete</em> to permanently remove a user account. This prevents them from logging in. Their past nominations are unaffected.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Remove a User</strong> — Click <em>Remove</em> to deactivate a user account (prevents further logins). Their past nominations and appreciations are unaffected. You cannot remove your own account.</p>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
               <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">C</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Reset a User's Password</strong> — From the Edit User modal, use the <em>Reset Password</em> option to set a new password for the user. Communicate the new password to them directly and securely.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Reset a User's Password</strong> — Click <em>"🔑 Reset PW"</em> next to any user to set a new password. Communicate it to them securely; they can change it again after logging in.</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <span style="background:#0D0D0D;color:white;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">D</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0"><strong>Download Users List</strong> — Click <em>"⬇ Download Users List"</em> to export all registered users (name, email, role, registration date) as a CSV file.</p>
             </div>
           </div>
         </div>
 
-        <!-- 5c Approving / Rejecting -->
         <div style="margin-bottom:22px">
-          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px;display:flex;align-items:center;gap:8px">🏅 Approving &amp; Rejecting Nominations</div>
-          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Admins action nominations from the <strong>All Submissions</strong> tab, not the Admin panel itself. Each row in the submissions table has action buttons:</p>
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px">🏅 Approving &amp; Rejecting — Nominations &amp; Appreciations</div>
+          <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin-bottom:10px">Admins action nominations from <strong>All Submissions</strong> and appreciation entries from <strong>Client Appreciations</strong>. The same passcode-protected flow applies to both:</p>
           <div style="display:flex;flex-direction:column;gap:9px">
             <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="background:var(--acc-green-bg);color:#007a5a;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">Approve</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Click <em>Approve</em> on a Pending nomination. You'll be prompted for the <strong>Approval Passcode</strong> (case-sensitive). You may also optionally assign a numeric rank (1, 2, 3…) to the nominee. Once confirmed, the status changes to <em>Approved</em>.</p>
+              <span style="background:var(--acc-green-bg);color:#007a5a;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">✔ Approve</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Click <em>Approve</em> on a Pending entry. Enter the <strong>Approval Passcode</strong>. For nominations, optionally assign a numeric rank (1–99; medals auto-display for ranks 1–3). Status changes to <em>Approved</em> and the approver's email is recorded.</p>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="background:var(--acc-red-bg);color:var(--acc-red);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">Reject</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Click <em>Reject</em> on an Approved nomination to revert it back to <em>Pending</em>. Requires the <strong>Rejection Passcode</strong>. Use this if an approval was made in error or requires further review.</p>
+              <span style="background:var(--acc-red-bg);color:var(--acc-red);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">✖ Reject</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Click <em>Reject</em> on an Approved entry to revert it to <em>Pending</em>. Requires the <strong>Rejection Passcode</strong>. Use this if an approval was made in error. The rejector's email is recorded.</p>
             </div>
             <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="background:var(--acc-red-bg);color:var(--acc-red);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">Delete</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Any admin can permanently delete a nomination using the <strong>Deletion Passcode</strong>. This is irreversible — use it only when a submission needs to be removed entirely (duplicate, error, inappropriate content).</p>
+              <span style="background:var(--acc-red-bg);color:var(--acc-red);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0">✕ Delete</span>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The ✕ button on each row permanently deletes the entry using the <strong>Deletion Passcode</strong>. Irreversible — use only for duplicates, errors, or inappropriate content.</p>
             </div>
           </div>
           <div style="background:var(--acc-gold-bg);border:1px solid #ffd980;border-radius:var(--radius-sm);padding:12px 16px;font-size:12px;color:#7a5200;line-height:1.7;margin-top:12px">
-            <strong>🔑 Passcode Note:</strong> All approval, rejection, and deletion actions are passcode-protected. Passcodes are case-sensitive and are maintained by the Admin team. If you are an admin and do not have the passcode, contact the Portal Product Owner.
+            <strong>🔑 Passcode Note:</strong> All passcodes are case-sensitive. The same passcode set is shared across nominations and client appreciations. Contact the Portal Product Owner if you need a passcode.
           </div>
         </div>
 
-        <!-- 5d Passcode Ops -->
         <div style="margin-bottom:22px">
-          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px;display:flex;align-items:center;gap:8px">🔐 Passcode Operations Summary</div>
+          <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:8px">🔐 Passcode Operations Summary</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
             <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px;text-align:center">
               <div style="font-size:13px;font-weight:700;color:var(--acc-green);margin-bottom:4px">Approval Passcode</div>
-              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Used to approve a nomination and optionally assign a rank</div>
+              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Approve nominations (with optional rank) and client appreciation entries</div>
             </div>
             <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px;text-align:center">
               <div style="font-size:13px;font-weight:700;color:var(--acc-gold);margin-bottom:4px">Rejection Passcode</div>
-              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Used to revert an approved nomination back to Pending</div>
+              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Revert an approved nomination or appreciation back to Pending</div>
             </div>
             <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px;text-align:center">
               <div style="font-size:13px;font-weight:700;color:var(--acc-red);margin-bottom:4px">Deletion Passcode</div>
-              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Used to permanently delete any nomination from the system</div>
+              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Permanently delete any nomination or appreciation entry</div>
             </div>
             <div style="border:1px solid var(--acc-gray-200);border-radius:var(--radius-sm);padding:12px;text-align:center">
               <div style="font-size:13px;font-weight:700;color:#990000;margin-bottom:4px">Flush Passcode</div>
-              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Danger Zone — wipes all submissions. Irreversible. Use only at end of cycle.</div>
+              <div style="font-size:11px;color:var(--acc-gray-500);line-height:1.5">Danger Zone — wipes all nominations OR all appreciations. End-of-cycle only.</div>
             </div>
           </div>
         </div>
 
-        <!-- 5e Danger Zone -->
         <div style="background:var(--acc-red-bg);border:1.5px solid #ffcccc;border-radius:var(--radius-sm);padding:16px 20px">
           <div style="font-size:14px;font-weight:700;color:var(--acc-red);margin-bottom:8px">⚠ Danger Zone — Flush All Entries</div>
-          <p style="font-size:13px;color:#aa0000;line-height:1.7;margin:0">The <em>"🗑 Flush All Entries"</em> button in the Admin panel permanently deletes <strong>every single submission</strong> across all categories and award types. This action <strong>cannot be undone</strong>. It requires the Flush Passcode and should only be used at the end of an award cycle once all results have been recorded and communicated externally.</p>
+          <p style="font-size:13px;color:#aa0000;line-height:1.7;margin:0">The Admin panel has two Flush buttons: <strong>"🗑 Flush All Nominations"</strong> permanently deletes all Quarterly &amp; Star of the Month submissions, and <strong>"🗑 Flush All Appreciations"</strong> permanently deletes all Client Appreciation entries. Both are <strong>irreversible</strong>, require the Flush Passcode, and should only be used at end-of-cycle once all results have been communicated externally.</p>
         </div>
       </div>
     </div>
 
-    <!-- ── SECTION 6: FAQs ── -->
+    <!-- SECTION 7: FAQs -->
     <div id="howto-faq" style="background:white;border-radius:var(--radius);border:1px solid var(--acc-gray-200);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden">
       <div style="background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-dark));padding:18px 28px;display:flex;align-items:center;gap:12px">
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px">❓</div>
-        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">6 — Frequently Asked Questions</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:white">7 — Frequently Asked Questions</div>
       </div>
       <div style="padding:28px;display:flex;flex-direction:column;gap:0">
-
         <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Can I nominate myself? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">No. The portal is designed for peer and manager recognition. Self-nominations are not in the spirit of the R&amp;R programme and will be reviewed accordingly by the admin team.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Yes. Self-nominations are allowed. </p>
         </details>
-
         <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Can I nominate the same person more than once? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Yes, within the same cycle — as long as the nominations are for different award categories or award types (e.g. one for Quarterly and one for Star of the Month). Multiple submissions for the exact same category and nominee in the same period will be reviewed by the admin.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Yes — but not for the same category in the same calendar month. The portal blocks duplicate nominations for the same person and category within the same month. You may re-nominate in a new month, or nominate them in a different category or award type in the same month.</p>
         </details>
-
+        <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
+          <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Can I attach a photo to a nomination? <span style="color:var(--acc-gray-300)">＋</span></summary>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Yes — both Quarterly and Star of the Month forms include an optional photo upload field. Only <strong>.jpg files under 1 MB</strong> are accepted. A purple dot (●) appears next to the nominee's name in the table to indicate a photo is attached, and the photo is shown in the detail view.</p>
+        </details>
+        <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
+          <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">What is the All Stars category and why can't I see it? <span style="color:var(--acc-gray-300)">＋</span></summary>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">The <strong>All Stars</strong> award category is reserved for admin-role users only. It is hidden from regular users and cannot be submitted by them. This category is used to recognise all-round performers at the discretion of the admin team.</p>
+        </details>
         <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">When will I know the results? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Results are communicated by the Admin team after the submission window closes and the review process is complete. You can track the status of any nomination (including your own) in the All Submissions tab in real time. Approved nominations will have their status updated to <em>Approved</em> and may have a rank assigned.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Results are communicated by the Admin team after the submission window closes. You can track nomination status in the All Submissions tab in real time. Approved nominations show <em>✔ Approved</em> and may have a rank assigned.</p>
         </details>
-
         <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">I can't log in — what do I do? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">If your login fails, it's most likely because your email hasn't been registered yet, or your password is incorrect. Contact the Admin team to have your account created or your password reset. Only @accenture.com addresses are accepted.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Your email may not be registered yet, or your password is incorrect. Contact the Admin team to have your account created or your password reset. Only @accenture.com addresses are accepted.</p>
         </details>
-
         <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">When does the submission window open and close? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Submission timelines are published in advance by the Admin team via email and team communications. There is no automatic lock in the portal — it is the nominator's responsibility to submit within the communicated window. Late entries may not be considered for the current cycle.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">Timelines are published in advance by the Admin team via email and team channels. There is no automatic portal lock — it is the nominator's responsibility to submit within the communicated window. Late entries may not be considered for the current cycle.</p>
         </details>
-
-        <details style="padding:14px 0">
+        <details style="border-bottom:1px solid var(--acc-gray-200);padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">What makes a strong nomination? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">The best nominations are <strong>specific</strong> and <strong>impactful</strong>. Mention the exact situation, what the person did, how it benefited the team or client, and what behaviours they demonstrated. Avoid vague phrases like "always does a great job" — instead describe a concrete example. A well-written citation is the strongest advocate your nominee has.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0">The best nominations are <strong>specific</strong> and <strong>impactful</strong>. Describe the exact situation, what the person did, how it benefited the team or client, and which behaviour they demonstrated. Avoid vague phrases like "always does a great job" — use a concrete example instead. You have up to 1,500 characters — use them well.</p>
         </details>
-
         <details style="padding:14px 0">
           <summary style="font-size:13px;font-weight:600;color:var(--acc-black);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">Can an Admin see my password? <span style="color:var(--acc-gray-300)">＋</span></summary>
-          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0"><strong>No — absolutely not.</strong> Passwords are never stored in plain text anywhere in the system. At the moment you set or change your password, it is immediately converted into an encrypted hash using <strong>SHA-256</strong> — a one-way cryptographic method. This means the original password cannot be read, reversed, or retrieved by anyone, including Admins. The only person who knows your password is <strong>you</strong>. If you forget it, an Admin can reset it to a new one — but they cannot see or recover your old one.</p>
+          <p style="font-size:13px;color:var(--acc-gray-500);line-height:1.7;margin-top:10px;margin-bottom:0"><strong>No — absolutely not.</strong> Passwords are never stored in plain text. At the moment you set or change your password, it is immediately converted into an encrypted hash using <strong>SHA-256</strong> — a one-way cryptographic method. The original password cannot be read, reversed, or retrieved by anyone, including Admins. If you forget it, an Admin can reset it to a new one — but they cannot see or recover your old one.</p>
         </details>
-
       </div>
     </div>
 
@@ -1438,6 +1691,7 @@
     </div>
 
   </div>
+
 
 </div><!-- /main-app -->
 
@@ -1645,7 +1899,7 @@
 // ══════════════════════════════════════════════════════════════════
 //  CONFIGURATION — REPLACE WITH YOUR OWN VALUES
 // ══════════════════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzF9fJvp2OoQVQ7j5ptTuabMJDTwUXBc4_-8YslThd269y1-4BB2YKnftM2WwSUlOlU/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwwwK-TZSq1uHc_M0qJkseGyF9Ks3GPesVa3oOlG_O-h4Ka5ChVUzdmx_a_zjnIqtwbNw/exec';
 //  ^ Paste your deployed Web App URL from Google Apps Script
 
 // ══════════════════════════════════════════════════════════════════
@@ -1796,12 +2050,14 @@ function finishLogin() {
   document.querySelector('.nav-tab').classList.add('active');
   buildCategoryCards();
   loadNominationsFromSheet();
+  loadAppreciationsFromSheet();
   updateStats();
 }
 
 function doLogout() {
   currentUser = null;
   nominations = [];
+  appreciations = [];
   registeredUsers = [];
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('topbar').style.display = 'none';
@@ -2054,12 +2310,13 @@ async function removeUser(email) {
 // ══════════════════════════════════════════════════════════════════
 function showTab(tab) {
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    const tabs = ['quarterly','star','submissions','admin','howto'];
+    const tabs = ['quarterly','star','submissions','appreciations','admin','howto'];
     t.classList.toggle('active', tabs[i] === tab);
   });
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
   if (tab === 'submissions') renderTable();
+  if (tab === 'appreciations') renderCATable();
   if (tab === 'admin') {
     const isAdmin = currentUser && currentUser.role === 'admin';
     document.getElementById('admin-locked-msg').style.display = isAdmin ? 'none' : 'block';
@@ -2741,6 +2998,51 @@ function downloadUsersList() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+//  DOWNLOAD CA EXCEL
+// ══════════════════════════════════════════════════════════════════
+function downloadCAExcel() {
+  if (!appreciations.length) { toast('⚠ No appreciation entries to export.', 'warn'); return; }
+  const headers = ['Appreciated To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Status','Approved By'];
+  const rows = appreciations.map(a => {
+    const addlMembers = Array.isArray(a.additionalMembers) ? a.additionalMembers.filter(Boolean).join('; ') : '';
+    return [
+      a.appreciatedTo, addlMembers, a.appreciatedBy, a.emailSubject, a.appreciationWords,
+      a.description, a.validator, a.submittedBy, a.date,
+      a.status === 'approved' ? 'Approved' : 'Pending',
+      a.approvedBy || ''
+    ];
+  });
+  const csv = [headers,...rows].map(r => r.map(c=>'\"'+String(c||'').replace(/"/g,'\"\"')+'\"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'CA_All_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('⬇ All appreciations downloaded.', 'success');
+}
+
+function downloadCAApprovedExcel() {
+  const approved = appreciations.filter(a => a.status === 'approved');
+  if (!approved.length) { toast('⚠ No approved appreciation entries to export.', 'warn'); return; }
+  const headers = ['Appreciated To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Approved By'];
+  const rows = approved.map(a => {
+    const addlMembers = Array.isArray(a.additionalMembers) ? a.additionalMembers.filter(Boolean).join('; ') : '';
+    return [
+      a.appreciatedTo, addlMembers, a.appreciatedBy, a.emailSubject, a.appreciationWords,
+      a.description, a.validator, a.submittedBy, a.date,
+      a.approvedBy || ''
+    ];
+  });
+  const csv = [headers,...rows].map(r => r.map(c=>'\"'+String(c||'').replace(/"/g,'\"\"')+'\"').join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'CA_Approved_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('✔ Approved appreciations downloaded.', 'success');
+}
+
+// ══════════════════════════════════════════════════════════════════
 //  DETAIL MODAL
 // ══════════════════════════════════════════════════════════════════
 function openDetail(id) {
@@ -2857,6 +3159,630 @@ function resetPhotoField(prefix) {
 const style = document.createElement('style');
 style.textContent = `@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}`;
 document.head.appendChild(style);
+
+// ══════════════════════════════════════════════════════════════════
+//  CLIENT APPRECIATIONS — STATE & HELPERS
+// ══════════════════════════════════════════════════════════════════
+let appreciations = [];
+let caTableFilter = 'all';
+let caPendingActionId = null;
+let caSortCol = null;
+let caSortDir = 'asc';
+const caColFilters = {};
+let caActiveFilterCol = null;
+let caPanelPendingSelection = null;
+let caPanelCurrentVals = [];
+let caPanelCol = null;
+
+function updateCharCountCA(id, counterId, max) {
+  const el = document.getElementById(id);
+  const ctr = document.getElementById(counterId);
+  if (!el || !ctr) return;
+  const len = el.value.length;
+  ctr.textContent = len + ' / ' + max + ' characters';
+  ctr.classList.toggle('near-limit', len >= max * 0.8 && len < max);
+  ctr.classList.toggle('at-limit', len >= max);
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — GOOGLE SHEETS SYNC
+// ══════════════════════════════════════════════════════════════════
+async function loadAppreciationsFromSheet() {
+  try {
+    const res = await gasCall({ action: 'getAppreciations' });
+    if (res.success) {
+      appreciations = (res.data || []).map(a => ({
+        ...a,
+        date: formatDateOnly(a.date),
+        additionalMembers: (() => { try { return (a.additionalMembers && String(a.additionalMembers).trim()) ? JSON.parse(a.additionalMembers) : []; } catch(e) { return []; } })()
+      }));
+      renderCATable();
+      updateCABadge();
+    }
+  } catch(e) {
+    toast('⚠ Could not load appreciations.', 'warn');
+  }
+}
+
+async function saveAppreciation(rec) {
+  try {
+    const res = await gasCall({ action: 'addAppreciation', data: rec });
+    if (!res.success) throw new Error(res.message);
+    appreciations.push(rec);
+    renderCATable();
+    updateCABadge();
+    toast('✅ Appreciation submitted successfully!', 'success');
+  } catch(e) {
+    toast('⚠ Error saving appreciation: ' + e.message, 'warn');
+  }
+}
+
+async function updateAppreciation(id, changes) {
+  try {
+    const res = await gasCall({ action: 'updateAppreciation', id, changes });
+    if (!res.success) throw new Error(res.message);
+    const idx = appreciations.findIndex(a => a.id === id);
+    if (idx !== -1) Object.assign(appreciations[idx], changes);
+    renderCATable();
+  } catch(e) {
+    toast('⚠ Error updating appreciation: ' + e.message, 'warn');
+  }
+}
+
+async function deleteAppreciation(id) {
+  try {
+    const res = await gasCall({ action: 'deleteAppreciation', id });
+    if (!res.success) throw new Error(res.message);
+    appreciations = appreciations.filter(a => a.id !== id);
+    renderCATable();
+    updateCABadge();
+  } catch(e) {
+    toast('⚠ Error deleting appreciation: ' + e.message, 'warn');
+  }
+}
+
+function updateCABadge() {
+  document.getElementById('badge-appreciations').textContent = appreciations.length;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — ADDITIONAL MEMBERS (email-only rows)
+// ══════════════════════════════════════════════════════════════════
+let caMemberRowId = 0;
+
+function addCAMember(emailVal) {
+  const container = document.getElementById('ca-members-rows');
+  const wrap = document.getElementById('ca-members-list-wrap');
+  const rid = ++caMemberRowId;
+  const row = document.createElement('div');
+  row.className = 'ca-member-row';
+  row.id = 'ca-mr-' + rid;
+  row.innerHTML = `
+    <input type="email" id="ca-mr-email-${rid}" maxlength="80"
+      placeholder="member@accenture.com"
+      oninput="this.value=this.value.replace(/\\s/g,'')"
+      value="${emailVal || ''}" />
+    <button class="remove-member-btn" onclick="removeCAMember(${rid})" title="Remove">✕</button>`;
+  container.appendChild(row);
+  wrap.style.display = 'block';
+}
+
+function removeCAMember(rid) {
+  const row = document.getElementById('ca-mr-' + rid);
+  if (row) row.remove();
+  const container = document.getElementById('ca-members-rows');
+  const wrap = document.getElementById('ca-members-list-wrap');
+  if (!container.children.length) wrap.style.display = 'none';
+}
+
+function getCAMembers() {
+  const rows = document.querySelectorAll('#ca-members-rows .ca-member-row');
+  const result = [];
+  rows.forEach(row => {
+    const emailInput = row.querySelector('input[type=email]');
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    if (email) result.push(email);
+  });
+  return result;
+}
+
+function clearCAMemberRows() {
+  document.getElementById('ca-members-rows').innerHTML = '';
+  document.getElementById('ca-members-list-wrap').style.display = 'none';
+  caMemberRowId = 0;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — ADDITIONAL MEMBERS (email-only rows) for EDIT modal
+// ══════════════════════════════════════════════════════════════════
+let caEditMemberRowId = 0;
+
+function addCAEditMember(emailVal) {
+  const container = document.getElementById('ca-edit-members-rows');
+  const wrap = document.getElementById('ca-edit-members-list-wrap');
+  const rid = ++caEditMemberRowId;
+  const row = document.createElement('div');
+  row.className = 'ca-member-row';
+  row.id = 'ca-edit-mr-' + rid;
+  row.innerHTML = `
+    <input type="email" id="ca-edit-mr-email-${rid}" maxlength="80"
+      placeholder="member@accenture.com"
+      oninput="this.value=this.value.replace(/\\s/g,'')"
+      value="${emailVal || ''}" />
+    <button class="remove-member-btn" onclick="removeCAEditMember(${rid})" title="Remove">✕</button>`;
+  container.appendChild(row);
+  wrap.style.display = 'block';
+}
+
+function removeCAEditMember(rid) {
+  const row = document.getElementById('ca-edit-mr-' + rid);
+  if (row) row.remove();
+  const container = document.getElementById('ca-edit-members-rows');
+  const wrap = document.getElementById('ca-edit-members-list-wrap');
+  if (!container.children.length) wrap.style.display = 'none';
+}
+
+function getCAEditMembers() {
+  const rows = document.querySelectorAll('#ca-edit-members-rows .ca-member-row');
+  const result = [];
+  rows.forEach(row => {
+    const emailInput = row.querySelector('input[type=email]');
+    const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    if (email) result.push(email);
+  });
+  return result;
+}
+
+function clearCAEditMemberRows() {
+  document.getElementById('ca-edit-members-rows').innerHTML = '';
+  document.getElementById('ca-edit-members-list-wrap').style.display = 'none';
+  caEditMemberRowId = 0;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — SUBMIT FORM
+// ══════════════════════════════════════════════════════════════════
+async function submitAppreciation() {
+  const to      = document.getElementById('ca-appreciated-to').value.trim().toLowerCase();
+  const by      = document.getElementById('ca-appreciated-by').value.trim().toLowerCase();
+  const subject = document.getElementById('ca-email-subject').value.trim();
+  const words   = document.getElementById('ca-appreciation-words').value.trim();
+  const desc    = document.getElementById('ca-description').value.trim();
+  const validator = document.getElementById('ca-validator').value.trim().toLowerCase();
+
+  if (!to) { toast('⚠ Appreciated To is required.', 'warn'); return; }
+  if (!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciated To must be an @accenture.com email.', 'warn'); return; }
+  if (!by) { toast('⚠ Appreciated By is required.', 'warn'); return; }
+  if (!/^[^\s@]+@(accenture|boi)\.com$/i.test(by)) { toast('⚠ Appreciated By must be @accenture.com or @boi.com.', 'warn'); return; }
+  if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
+  if (subject.length > 150) { toast('⚠ Email Subject cannot exceed 150 characters.', 'warn'); return; }
+  if (!words) { toast('⚠ Appreciation Words are required.', 'warn'); return; }
+  if (words.length > 300) { toast('⚠ Appreciation Words cannot exceed 300 characters.', 'warn'); return; }
+  if (!desc) { toast('⚠ Description is required.', 'warn'); return; }
+  if (desc.length > 800) { toast('⚠ Description cannot exceed 800 characters.', 'warn'); return; }
+  if (!validator) { toast('⚠ Validator email is required.', 'warn'); return; }
+  if (!/^[^\s@]+@accenture\.com$/i.test(validator)) { toast('⚠ Validator must be an @accenture.com email.', 'warn'); return; }
+
+  // Validate optional additional members
+  const additionalMembers = getCAMembers();
+  for (const email of additionalMembers) {
+    if (!/^[^\s@]+@accenture\.com$/i.test(email)) {
+      toast('⚠ Additional member "' + email + '" must be an @accenture.com email.', 'warn'); return;
+    }
+  }
+
+  // Duplicate check: same Email Subject AND same Appreciated To
+  const dup = appreciations.find(a =>
+    a.appreciatedTo.toLowerCase() === to &&
+    a.emailSubject.toLowerCase() === subject.toLowerCase()
+  );
+  if (dup) {
+    toast('⚠ Duplicate entry: An appreciation with the same Email Subject and Appreciated To already exists.', 'warn');
+    return;
+  }
+
+  const rec = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    appreciatedTo: to,
+    appreciatedBy: by,
+    emailSubject: subject,
+    appreciationWords: words,
+    description: desc,
+    validator: validator,
+    additionalMembers: additionalMembers,
+    submittedBy: currentUser.email,
+    date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
+    status: 'pending',
+    approvedBy: '', approvedAt: '', removedBy: '', removedAt: ''
+  };
+
+  await saveAppreciation(rec);
+
+  // Reset form
+  ['ca-appreciated-to','ca-appreciated-by','ca-email-subject','ca-appreciation-words','ca-description','ca-validator'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  ['ca-subject-counter','ca-words-counter','ca-desc-counter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = el.textContent.replace(/^\d+/, '0');
+  });
+  clearCAMemberRows();
+}
+
+function clearCAForm() {
+  ['ca-appreciated-to','ca-appreciated-by','ca-email-subject','ca-appreciation-words','ca-description','ca-validator'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('ca-subject-counter').textContent = '0 / 150 characters';
+  document.getElementById('ca-words-counter').textContent = '0 / 300 characters';
+  document.getElementById('ca-desc-counter').textContent = '0 / 800 characters';
+  clearCAMemberRows();
+  toast('✔ Form cleared.', 'success');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — TABLE FILTER / SORT / RENDER
+// ══════════════════════════════════════════════════════════════════
+function getCAColValue(a, col) {
+  switch(col) {
+    case 'ca-to':        return a.appreciatedTo || '—';
+    case 'ca-by':        return a.appreciatedBy || '—';
+    case 'ca-validator': return a.validator || '—';
+    case 'ca-date':      return a.date || '—';
+    case 'ca-status':    return a.status === 'approved' ? 'Approved' : 'Pending';
+    case 'ca-submitted': return a.submittedBy || '—';
+    default: return '—';
+  }
+}
+
+function setCAFilter(f, btn) {
+  caTableFilter = f;
+  document.querySelectorAll('#page-appreciations .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCATable();
+}
+
+function toggleCASort(col) {
+  if (caSortCol === col) {
+    if (caSortDir === 'asc') caSortDir = 'desc';
+    else { caSortCol = null; caSortDir = 'asc'; }
+  } else {
+    caSortCol = col; caSortDir = 'asc';
+  }
+  document.querySelectorAll('#ca-table .sort-btn-icon').forEach(b => { b.classList.remove('asc','desc'); b.textContent = '↕'; });
+  if (caSortCol) {
+    const btn = document.getElementById('sbtn-'+caSortCol);
+    if (btn) { btn.classList.add(caSortDir); btn.textContent = caSortDir==='asc'?'↑':'↓'; }
+  }
+  renderCATable();
+}
+
+function clearAllCAFilters() {
+  Object.keys(caColFilters).forEach(k => delete caColFilters[k]);
+  document.querySelectorAll('#ca-table .filter-btn-icon').forEach(b => b.classList.remove('active'));
+  document.getElementById('ca-btn-clear-all-filters').style.display = 'none';
+  renderCATable();
+}
+
+function renderCATable() {
+  const q = (document.getElementById('ca-search-input') ? document.getElementById('ca-search-input').value : '').toLowerCase();
+  let rows = appreciations.filter(a => {
+    if (caTableFilter === 'pending') return a.status === 'pending';
+    if (caTableFilter === 'approved') return a.status === 'approved';
+    return true;
+  });
+  if (q) rows = rows.filter(a =>
+    (a.appreciatedTo||'').toLowerCase().includes(q) ||
+    (a.appreciatedBy||'').toLowerCase().includes(q) ||
+    (a.emailSubject||'').toLowerCase().includes(q) ||
+    (a.validator||'').toLowerCase().includes(q) ||
+    (a.submittedBy||'').toLowerCase().includes(q)
+  );
+  for (const [col, selSet] of Object.entries(caColFilters)) {
+    if (selSet && selSet.size > 0) rows = rows.filter(a => selSet.has(getCAColValue(a, col)));
+  }
+  const hasActiveFilters = Object.values(caColFilters).some(s => s && s.size > 0);
+  const clearBtn = document.getElementById('ca-btn-clear-all-filters');
+  if (clearBtn) clearBtn.style.display = hasActiveFilters ? 'inline-flex' : 'none';
+  if (caSortCol) {
+    rows = [...rows].sort((a,b) => {
+      const va = getCAColValue(a, caSortCol);
+      const vb = getCAColValue(b, caSortCol);
+      const cmp = va.localeCompare(vb, undefined, {numeric:true, sensitivity:'base'});
+      return caSortDir === 'asc' ? cmp : -cmp;
+    });
+  }
+  const tbody = document.getElementById('ca-table-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📭</div><p>No appreciation entries match your filter.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map((a,i) => {
+    const isOwner = a.submittedBy === currentUser.email;
+    const isApproved = a.status === 'approved';
+    const subjectPreview = a.emailSubject.length > 50 ? a.emailSubject.slice(0,50)+'…' : a.emailSubject;
+    return `<tr>
+      <td style="color:var(--acc-gray-500);font-size:10px">${i+1}</td>
+      <td><span class="nominee-link" onclick="openCADetail('${a.id}')">${a.appreciatedTo}</span></td>
+      <td style="font-size:12px;color:var(--acc-gray-700)">${a.appreciatedBy}</td>
+      <td style="font-size:12px">${subjectPreview}</td>
+      <td style="font-size:12px;color:var(--acc-gray-500)">${a.validator}</td>
+      <td style="font-size:11px;color:var(--acc-gray-500);white-space:nowrap">${formatDateOnly(a.date)}</td>
+      <td style="font-size:11px;color:var(--acc-gray-500)">${a.submittedBy}</td>
+      <td><span class="badge badge-${isApproved?'approved':'pending'}">${isApproved?'✔ Approved':'⏳ Pending'}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          ${isOwner&&!isApproved?`<button class="btn btn-secondary btn-sm" onclick="openCAEdit('${a.id}')">✏ Edit</button>`:''}
+          ${isOwner&&!isApproved?`<button class="btn btn-danger btn-sm" onclick="openCASelfDelete('${a.id}')">🗑 Delete</button>`:''}
+          ${!isApproved?`<button class="btn btn-gold btn-sm" onclick="openCAApprove('${a.id}')">✔ Approve</button>`:''}
+          ${isApproved?`<button class="btn btn-danger btn-sm" onclick="openCAReject('${a.id}')">✖ Reject</button>`:''}
+          <button class="btn-x-delete" onclick="openCAAdminDelete('${a.id}')" title="Delete record">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — DETAIL MODAL
+// ══════════════════════════════════════════════════════════════════
+function openCADetail(id) {
+  const a = appreciations.find(x => x.id === id);
+  if (!a) return;
+  let actionHtml = '';
+  if (a.status==='approved'&&a.approvedBy) actionHtml = `<div class="detail-section"><div class="detail-label">Approved By</div><span class="action-by-badge">✔ ${a.approvedBy}</span>${a.approvedAt?`<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${formatDateOnly(a.approvedAt)}</span>`:''}</div>`;
+  else if (a.removedBy) actionHtml = `<div class="detail-section"><div class="detail-label">Rejected By</div><span class="rejected-by-badge">✖ ${a.removedBy}</span>${a.removedAt?`<span style="font-size:12px;color:var(--acc-gray-500);margin-left:8px">${formatDateOnly(a.removedAt)}</span>`:''}</div>`;
+  document.getElementById('ca-detail-body').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--acc-gray-200)">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--acc-purple),var(--acc-purple-dark));display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:white">${(a.appreciatedTo.split('@')[0].charAt(0)||'?').toUpperCase()}</div>
+      <div style="text-align:center">
+        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:800">${a.appreciatedTo}</div>
+        <div style="font-size:12px;color:var(--acc-purple);margin-top:2px">Appreciated by: ${a.appreciatedBy}</div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-section"><div class="detail-label">Validator</div><div class="detail-value">${a.validator}</div></div>
+      <div class="detail-section"><div class="detail-label">Submitted By</div><div class="detail-value">${a.submittedBy}</div></div>
+      <div class="detail-section"><div class="detail-label">Date</div><div class="detail-value">${formatDateOnly(a.date)}</div></div>
+      <div class="detail-section"><div class="detail-label">Status</div><div class="detail-value"><span class="badge badge-${a.status==='approved'?'approved':'pending'}">${a.status==='approved'?'✔ Approved':'⏳ Pending'}</span></div></div>
+    </div>
+    <div class="detail-section"><div class="detail-label">Email Subject</div><div class="detail-value" style="font-weight:600">${a.emailSubject}</div></div>
+    <div class="detail-section"><div class="detail-label">Appreciation Words</div><div class="detail-reason-box" style="background:#fff8e0;border-color:#ffd980">${a.appreciationWords}</div></div>
+    <div class="detail-section"><div class="detail-label">Description</div><div class="detail-reason-box">${a.description}</div></div>
+    ${(Array.isArray(a.additionalMembers) && a.additionalMembers.filter(Boolean).length) ? `
+    <div class="detail-section">
+      <div class="detail-label">Additional Team Members Appreciated</div>
+      <table class="detail-members-table" style="margin-top:6px">
+        <thead><tr><th>#</th><th>Email</th></tr></thead>
+        <tbody>${a.additionalMembers.filter(Boolean).map((email, i) => `<tr><td style="color:var(--acc-gray-500)">${i+1}</td><td>${email}</td></tr>`).join('')}</tbody>
+      </table>
+    </div>` : ''}
+    ${actionHtml}`;
+  openModal('modal-ca-detail');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — ACTION MODALS
+// ══════════════════════════════════════════════════════════════════
+function openCAApprove(id) { caPendingActionId = id; document.getElementById('ca-approve-code').value = ''; openModal('modal-ca-approve'); }
+async function confirmCAApprove() {
+  const code = document.getElementById('ca-approve-code').value;
+  if (await sha256(code) !== '1f89805230d6c188966af691fcfc6d80a945a2c2ee6e8ab4126717c6b9ec1e1b') { toast('✖ Incorrect passcode.', 'error'); return; }
+  const changes = { status:'approved', approvedBy:currentUser.email, approvedAt:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), removedBy:'' };
+  await updateAppreciation(caPendingActionId, changes);
+  closeModal('modal-ca-approve');
+  toast('✅ Appreciation approved!', 'success');
+}
+
+function openCAReject(id) { caPendingActionId = id; document.getElementById('ca-reject-code').value = ''; openModal('modal-ca-reject'); }
+async function confirmCAReject() {
+  const code = document.getElementById('ca-reject-code').value;
+  if (await sha256(code) !== '3f724ba0f7d563aac1af1f3a379c57930451b8c957bfc37359714e83d739a642') { toast('✖ Incorrect passcode.', 'error'); return; }
+  const changes = { status:'pending', approvedBy:'', removedBy:currentUser.email, removedAt:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) };
+  await updateAppreciation(caPendingActionId, changes);
+  closeModal('modal-ca-reject');
+  toast('⚠ Appreciation rejected, reverted to Pending.', 'warn');
+}
+
+function openCAAdminDelete(id) { caPendingActionId = id; document.getElementById('ca-admin-delete-code').value = ''; openModal('modal-ca-admin-delete'); }
+async function confirmCAAdminDelete() {
+  const code = document.getElementById('ca-admin-delete-code').value;
+  if (await sha256(code) !== '181b60b1302b9514dc89299cf92da425df74408a0bf1d49fd6ea2faf204732aa') { toast('✖ Incorrect passcode.', 'error'); return; }
+  await deleteAppreciation(caPendingActionId);
+  closeModal('modal-ca-admin-delete');
+  toast('🗑 Appreciation deleted.', 'warn');
+}
+
+function openCASelfDelete(id) {
+  const a = appreciations.find(x => x.id === id);
+  if (!a || a.submittedBy !== currentUser.email) { toast('✖ You can only delete your own entries.', 'error'); return; }
+  caPendingActionId = id;
+  document.getElementById('ca-delete-id').value = id;
+  openModal('modal-ca-delete');
+}
+async function confirmCASelfDelete() {
+  const id = document.getElementById('ca-delete-id').value;
+  await deleteAppreciation(id);
+  closeModal('modal-ca-delete');
+  toast('🗑 Appreciation deleted.', 'warn');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — EDIT MODAL
+// ══════════════════════════════════════════════════════════════════
+function openCAEdit(id) {
+  const a = appreciations.find(x => x.id === id);
+  if (!a || a.submittedBy !== currentUser.email) { toast('✖ You can only edit your own entries.', 'error'); return; }
+  document.getElementById('ca-edit-id').value = id;
+  document.getElementById('ca-edit-to').value = a.appreciatedTo;
+  document.getElementById('ca-edit-by').value = a.appreciatedBy;
+  document.getElementById('ca-edit-subject').value = a.emailSubject;
+  document.getElementById('ca-edit-words').value = a.appreciationWords;
+  document.getElementById('ca-edit-desc').value = a.description;
+  document.getElementById('ca-edit-validator').value = a.validator;
+  // Load additional members
+  clearCAEditMemberRows();
+  const members = Array.isArray(a.additionalMembers) ? a.additionalMembers : [];
+  members.forEach(email => { if (email) addCAEditMember(email); });
+  openModal('modal-ca-edit');
+}
+async function saveCAEdit() {
+  const id      = document.getElementById('ca-edit-id').value;
+  const to      = document.getElementById('ca-edit-to').value.trim().toLowerCase();
+  const by      = document.getElementById('ca-edit-by').value.trim().toLowerCase();
+  const subject = document.getElementById('ca-edit-subject').value.trim();
+  const words   = document.getElementById('ca-edit-words').value.trim();
+  const desc    = document.getElementById('ca-edit-desc').value.trim();
+  const validator = document.getElementById('ca-edit-validator').value.trim().toLowerCase();
+
+  if (!to||!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciated To must be @accenture.com.', 'warn'); return; }
+  if (!by||!/^[^\s@]+@(accenture|boi)\.com$/i.test(by)) { toast('⚠ Appreciated By must be @accenture.com or @boi.com.', 'warn'); return; }
+  if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
+  if (!words) { toast('⚠ Appreciation Words are required.', 'warn'); return; }
+  if (!desc) { toast('⚠ Description is required.', 'warn'); return; }
+  if (!validator||!/^[^\s@]+@accenture\.com$/i.test(validator)) { toast('⚠ Validator must be @accenture.com.', 'warn'); return; }
+
+  // Validate optional additional members
+  const additionalMembers = getCAEditMembers();
+  for (const email of additionalMembers) {
+    if (!/^[^\s@]+@accenture\.com$/i.test(email)) {
+      toast('⚠ Additional member "' + email + '" must be an @accenture.com email.', 'warn'); return;
+    }
+  }
+
+  // Duplicate check: same Subject + same To, excluding self
+  const dup = appreciations.find(a => a.id !== id && a.appreciatedTo.toLowerCase() === to && a.emailSubject.toLowerCase() === subject.toLowerCase());
+  if (dup) { toast('⚠ Duplicate entry: same Email Subject and Appreciated To already exists.', 'warn'); return; }
+
+  const changes = { appreciatedTo:to, appreciatedBy:by, emailSubject:subject, appreciationWords:words, description:desc, validator, additionalMembers };
+  await updateAppreciation(id, changes);
+  closeModal('modal-ca-edit');
+  toast('✅ Appreciation updated.', 'success');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — FLUSH
+// ══════════════════════════════════════════════════════════════════
+function openFlushCAModal() { document.getElementById('flush-ca-code').value = ''; openModal('modal-flush-ca'); }
+async function confirmFlushCA() {
+  const code = document.getElementById('flush-ca-code').value;
+  if (await sha256(code) !== '114b7af52a223fa37e2888f6623e6b4bed32a76bd96cc3183ca6599379e4fbd7') { toast('✖ Incorrect passcode.', 'error'); return; }
+  try {
+    const res = await gasCall({ action: 'flushAppreciations' });
+    if (!res.success) throw new Error(res.message);
+    appreciations = [];
+    renderCATable();
+    updateCABadge();
+    closeModal('modal-flush-ca');
+    toast('🗑 All appreciation entries flushed.', 'warn');
+  } catch(e) { toast('⚠ Error flushing: ' + e.message, 'warn'); }
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  CA — COLUMN FILTER (mirrors main table filter logic)
+// ══════════════════════════════════════════════════════════════════
+function toggleCAFilter(e, col) {
+  e.stopPropagation();
+  const panel = document.getElementById('ca-excel-filter-panel');
+  if (caActiveFilterCol === col && panel.classList.contains('open')) { closeCAFilterPanel(); return; }
+  caActiveFilterCol = col;
+  openCAFilterPanel(col, e.currentTarget);
+}
+
+function openCAFilterPanel(col, btnEl) {
+  const panel = document.getElementById('ca-excel-filter-panel');
+  document.getElementById('ca-efp-search-input').value = '';
+  const allVals = [...new Set(appreciations.map(a => getCAColValue(a, col)))].sort((a,b) => a.localeCompare(b, undefined, {numeric:true}));
+  const selected = caColFilters[col] || new Set();
+  renderCAEfpList(col, allVals, selected, '');
+  const rect = btnEl.getBoundingClientRect();
+  panel.style.top  = (rect.bottom + 4) + 'px';
+  panel.style.left = Math.min(rect.left, window.innerWidth - 210) + 'px';
+  panel.classList.add('open');
+  setTimeout(() => { document.addEventListener('click', outsideCAFilterClick, {once:true, capture:true}); }, 0);
+}
+
+function outsideCAFilterClick(e) {
+  const panel = document.getElementById('ca-excel-filter-panel');
+  if (!panel.contains(e.target)) { closeCAFilterPanel(); }
+  else { setTimeout(() => { document.addEventListener('click', outsideCAFilterClick, {once:true, capture:true}); }, 0); }
+}
+
+function renderCAEfpList(col, allVals, selected, search) {
+  const list = document.getElementById('ca-efp-list');
+  const filtered = search ? allVals.filter(v => v.toLowerCase().includes(search.toLowerCase())) : allVals;
+  const isChecked = v => {
+    if (caPanelPendingSelection !== null) return caPanelPendingSelection.has(v);
+    if (selected.size > 0) return selected.has(v);
+    return false;
+  };
+  const allChecked = filtered.length > 0 && filtered.every(v => isChecked(v));
+  list.innerHTML = `<label class="efp-item select-all"><input type="checkbox" id="ca-efp-select-all" ${allChecked?'checked':''} onchange="caEfpToggleAll(this)" /><span>(Select All)</span></label>` +
+    filtered.map(v => `<label class="efp-item"><input type="checkbox" value="${v.replace(/"/g,'&quot;')}" ${isChecked(v)?'checked':''} onchange="caEfpToggleItem(this)" /><span>${v}</span></label>`).join('');
+  caPanelCurrentVals = filtered; caPanelCol = col;
+}
+
+function caEfpSearch() {
+  const q = document.getElementById('ca-efp-search-input').value;
+  const allVals = [...new Set(appreciations.map(a => getCAColValue(a, caPanelCol)))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const checks = document.querySelectorAll('#ca-efp-list .efp-item:not(.select-all) input');
+  if (checks.length > 0) {
+    if (caPanelPendingSelection === null) {
+      const saved = caColFilters[caPanelCol];
+      caPanelPendingSelection = saved && saved.size > 0 ? new Set(saved) : new Set();
+    }
+    checks.forEach(c => { if (c.checked) caPanelPendingSelection.add(c.value); else caPanelPendingSelection.delete(c.value); });
+  }
+  renderCAEfpList(caPanelCol, allVals, caColFilters[caPanelCol]||new Set(), q);
+}
+function caEfpToggleAll(cb) {
+  document.querySelectorAll('#ca-efp-list .efp-item:not(.select-all) input').forEach(c => c.checked = cb.checked);
+  if (caPanelPendingSelection === null) {
+    const saved = caColFilters[caPanelCol];
+    caPanelPendingSelection = saved && saved.size > 0 ? new Set(saved) : new Set();
+  }
+  caPanelCurrentVals.forEach(v => { if (cb.checked) caPanelPendingSelection.add(v); else caPanelPendingSelection.delete(v); });
+}
+function caEfpToggleItem(cb) {
+  const checks = document.querySelectorAll('#ca-efp-list .efp-item:not(.select-all) input');
+  document.getElementById('ca-efp-select-all').checked = [...checks].every(c => c.checked);
+  if (caPanelPendingSelection === null) {
+    const saved = caColFilters[caPanelCol];
+    caPanelPendingSelection = saved && saved.size > 0 ? new Set(saved) : new Set();
+  }
+  if (cb.checked) caPanelPendingSelection.add(cb.value); else caPanelPendingSelection.delete(cb.value);
+}
+function caEfpApply() {
+  const allVals = [...new Set(appreciations.map(a => getCAColValue(a, caPanelCol)))];
+  let newSet;
+  if (caPanelPendingSelection !== null) {
+    const checks = document.querySelectorAll('#ca-efp-list .efp-item:not(.select-all) input');
+    checks.forEach(c => { if (c.checked) caPanelPendingSelection.add(c.value); else caPanelPendingSelection.delete(c.value); });
+    newSet = new Set(caPanelPendingSelection);
+  } else {
+    const checks = document.querySelectorAll('#ca-efp-list .efp-item:not(.select-all) input');
+    newSet = new Set([...checks].filter(c => c.checked).map(c => c.value));
+  }
+  if (newSet.size === 0 || newSet.size === allVals.length) { delete caColFilters[caPanelCol]; }
+  else { caColFilters[caPanelCol] = newSet; }
+  caPanelPendingSelection = null;
+  updateCAFilterBtnState(caPanelCol);
+  closeCAFilterPanel();
+  renderCATable();
+}
+function caEfpClear() { caPanelPendingSelection = null; delete caColFilters[caPanelCol]; updateCAFilterBtnState(caPanelCol); closeCAFilterPanel(); renderCATable(); }
+function updateCAFilterBtnState(col) {
+  const btn = document.getElementById('fbtn-'+col);
+  if (!btn) return;
+  btn.classList.toggle('active', !!(caColFilters[col] && caColFilters[col].size > 0));
+}
+function closeCAFilterPanel() {
+  caPanelPendingSelection = null;
+  document.getElementById('ca-excel-filter-panel').classList.remove('open');
+  caActiveFilterCol = null;
+}
 
 // Init
 updateStats();
@@ -3082,6 +4008,166 @@ updateStats();
   <div class="efp-footer">
     <button class="efp-btn efp-btn-clear" onclick="efpClear()">Clear</button>
     <button class="efp-btn efp-btn-apply" onclick="efpApply()">Apply</button>
+  </div>
+</div>
+
+<!-- CA EXCEL FILTER PANEL -->
+<div class="excel-filter-panel" id="ca-excel-filter-panel">
+  <div class="efp-search"><input type="text" id="ca-efp-search-input" placeholder="Search…" oninput="caEfpSearch()" /></div>
+  <div class="efp-list" id="ca-efp-list"></div>
+  <div class="efp-footer">
+    <button class="efp-btn efp-btn-clear" onclick="caEfpClear()">Clear</button>
+    <button class="efp-btn efp-btn-apply" onclick="caEfpApply()">Apply</button>
+  </div>
+</div>
+
+<!-- ═════════ CA MODALS ═════════ -->
+
+<!-- CA: FLUSH MODAL -->
+<div class="modal-backdrop" id="modal-flush-ca">
+  <div class="modal">
+    <h3 style="color:var(--acc-red)">⚠ Flush All Client Appreciations</h3>
+    <p>This will permanently delete <strong>all Client Appreciation entries</strong>. This action cannot be undone. Enter the flush passcode to proceed.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Flush Passcode</label>
+      <input type="password" id="flush-ca-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('flush-ca-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-flush-ca')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmFlushCA()">Yes, Flush All Appreciations</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: APPROVE MODAL -->
+<div class="modal-backdrop" id="modal-ca-approve">
+  <div class="modal">
+    <h3>🏅 Approve Client Appreciation</h3>
+    <p>Enter the approval passcode to approve this appreciation entry. Passcode is case-sensitive.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Approval Passcode</label>
+      <input type="password" id="ca-approve-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('ca-approve-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-approve')">Cancel</button>
+      <button class="btn btn-success" onclick="confirmCAApprove()">✔ Confirm Approval</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: REJECT MODAL -->
+<div class="modal-backdrop" id="modal-ca-reject">
+  <div class="modal">
+    <h3>🚫 Reject Client Appreciation</h3>
+    <p>Enter the rejection passcode to revert this entry to Pending.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Rejection Passcode</label>
+      <input type="password" id="ca-reject-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('ca-reject-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-reject')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmCAReject()">Confirm Rejection</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: ADMIN DELETE MODAL -->
+<div class="modal-backdrop" id="modal-ca-admin-delete">
+  <div class="modal">
+    <h3 style="color:var(--acc-red)">🗑 Delete Appreciation Entry</h3>
+    <p style="margin-bottom:18px">Enter the deletion passcode to permanently remove this entry. This action cannot be undone.</p>
+    <div class="edit-form-group passcode-field" style="position:relative">
+      <label>Deletion Passcode</label>
+      <input type="password" id="ca-admin-delete-code" placeholder="Enter passcode" style="letter-spacing:3px;padding-right:44px" />
+      <button class="toggle-eye" onclick="toggleEye('ca-admin-delete-code',this)" title="Show/hide">👁</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-admin-delete')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmCAAdminDelete()">🗑 Confirm Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: SELF DELETE CONFIRM MODAL -->
+<div class="modal-backdrop" id="modal-ca-delete">
+  <div class="modal">
+    <h3>🗑 Delete Appreciation?</h3>
+    <p>Are you sure you want to delete this entry? This action cannot be undone.</p>
+    <input type="hidden" id="ca-delete-id" />
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-delete')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmCASelfDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: EDIT MODAL -->
+<div class="modal-backdrop" id="modal-ca-edit">
+  <div class="modal" style="max-width:580px">
+    <h3>✏ Edit Client Appreciation</h3>
+    <p>Update the details below. You can only edit your own entries.</p>
+    <input type="hidden" id="ca-edit-id" />
+    <div class="edit-form-group">
+      <label>Appreciated To <span class="req">*</span></label>
+      <input type="email" id="ca-edit-to" maxlength="80" placeholder="email@accenture.com" oninput="this.value=this.value.replace(/\s/g,'')" />
+    </div>
+    <div class="edit-form-group">
+      <label>Appreciated By <span class="req">*</span></label>
+      <input type="email" id="ca-edit-by" maxlength="80" placeholder="email@accenture.com or @boi.com" oninput="this.value=this.value.replace(/\s/g,'')" />
+    </div>
+    <div class="edit-form-group">
+      <label>Email Subject <span class="req">*</span></label>
+      <input type="text" id="ca-edit-subject" maxlength="150" />
+    </div>
+    <div class="edit-form-group">
+      <label>Appreciation Words <span class="req">*</span></label>
+      <textarea id="ca-edit-words" rows="3" maxlength="300"></textarea>
+    </div>
+    <div class="edit-form-group">
+      <label>Description <span class="req">*</span></label>
+      <textarea id="ca-edit-desc" rows="4" maxlength="800"></textarea>
+    </div>
+    <div class="edit-form-group">
+      <label>Validator <span class="req">*</span></label>
+      <input type="email" id="ca-edit-validator" maxlength="80" oninput="this.value=this.value.replace(/\s/g,'')" />
+    </div>
+    <div class="edit-form-group">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div>
+          <label style="margin-bottom:0">Additional Team Members Appreciated <span style="font-size:11px;font-weight:400;color:var(--acc-gray-500);text-transform:none;letter-spacing:0">(Optional)</span></label>
+          <div class="field-hint" style="margin-top:2px">Add other @accenture.com team members who were also appreciated. Email addresses only.</div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="addCAEditMember()" style="flex-shrink:0;margin-left:12px">＋ Add Member</button>
+      </div>
+      <div class="team-members-list" id="ca-edit-members-list-wrap" style="display:none">
+        <div class="ca-member-header-email">
+          <span>Email Address (@accenture.com)</span>
+          <span style="padding:7px 10px;min-width:42px"></span>
+        </div>
+        <div id="ca-edit-members-rows"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-edit')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCAEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- CA: DETAIL MODAL -->
+<div class="modal-backdrop" id="modal-ca-detail">
+  <div class="modal" style="max-width:620px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <h3>✨ Appreciation Details</h3>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-ca-detail')" style="font-size:18px;padding:4px 10px;line-height:1">✕</button>
+    </div>
+    <div id="ca-detail-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ca-detail')">Close</button>
+    </div>
   </div>
 </div>
 
