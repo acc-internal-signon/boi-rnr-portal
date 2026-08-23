@@ -465,6 +465,37 @@
     title: "Has photo";
   }
 
+  /* ── INACTIVITY TIMEOUT MODAL ── */
+  #timeout-modal-backdrop {
+    position: fixed; inset: 0; z-index: 9998;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+    display: none; align-items: center; justify-content: center;
+  }
+  #timeout-modal-backdrop.open { display: flex; }
+  #timeout-modal {
+    background: white; border-radius: var(--radius);
+    padding: 36px 32px; width: 100%; max-width: 400px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+    text-align: center; position: relative;
+    border-top: 5px solid var(--acc-red);
+    animation: slideInUp 0.3s ease;
+  }
+  @keyframes slideInUp { from { transform: translateY(30px); opacity:0; } }
+  #timeout-modal .tm-icon { font-size: 42px; margin-bottom: 12px; }
+  #timeout-modal h3 {
+    font-family: 'Barlow', sans-serif; font-size: 20px; font-weight: 700;
+    color: var(--acc-black); margin-bottom: 10px;
+  }
+  #timeout-modal p { font-size: 13px; color: var(--acc-gray-500); line-height: 1.6; margin-bottom: 20px; }
+  #timeout-countdown {
+    font-family: 'Barlow', sans-serif; font-size: 40px; font-weight: 800;
+    color: var(--acc-red); margin-bottom: 20px; line-height: 1;
+    transition: color 0.3s;
+  }
+  #timeout-countdown.urgent { color: var(--acc-red); animation: pulse 0.6s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  #timeout-modal .tm-footer { display: flex; gap: 12px; justify-content: center; }
+
   /* ── FLUSH WARNING ── */
   .flush-zone {
     background: var(--acc-red-bg); border: 1.5px solid #ffcccc;
@@ -1079,9 +1110,9 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
       <div class="form-body">
         <div class="form-grid">
 
-          <!-- Appreciated To -->
+          <!-- Appreciation To -->
           <div class="form-group">
-            <label>Appreciated To <span class="req">*</span></label>
+            <label>Appreciation To <span class="req">*</span></label>
             <input type="email" id="ca-appreciated-to" maxlength="80"
               placeholder="The @accenture.com email of the team member who received the appreciation. No spaces allowed. Must be @accenture.com"
               oninput="this.value=this.value.replace(/\s/g,'')" />
@@ -1175,7 +1206,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
       <div class="table-toolbar">
         <div class="search-box">
           <span style="color:var(--acc-gray-500)">🔍</span>
-          <input type="text" placeholder="Search by Appreciated To, By, Subject…" id="ca-search-input" oninput="renderCATable()" />
+          <input type="text" placeholder="Search by Appreciation To, By, Subject…" id="ca-search-input" oninput="renderCATable()" />
         </div>
         <div class="filter-tabs">
           <button class="filter-btn active" onclick="setCAFilter('all',this)">All</button>
@@ -1189,7 +1220,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
           <thead>
             <tr>
               <th><div class="th-inner"><span class="th-label">#</span></div></th>
-              <th><div class="th-inner"><span class="th-label">Appreciated To</span><span class="sort-btn-icon" id="sbtn-ca-to" onclick="toggleCASort('ca-to')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-to" onclick="toggleCAFilter(event,'ca-to')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Appreciation To</span><span class="sort-btn-icon" id="sbtn-ca-to" onclick="toggleCASort('ca-to')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-to" onclick="toggleCAFilter(event,'ca-to')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Appreciated By</span><span class="sort-btn-icon" id="sbtn-ca-by" onclick="toggleCASort('ca-by')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-by" onclick="toggleCAFilter(event,'ca-by')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Email Subject</span></div></th>
               <th><div class="th-inner"><span class="th-label">Validator</span><span class="sort-btn-icon" id="sbtn-ca-validator" onclick="toggleCASort('ca-validator')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-ca-validator" onclick="toggleCAFilter(event,'ca-validator')">▼</span></div></th>
@@ -1501,7 +1532,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
           <div style="font-size:14px;font-weight:700;color:var(--acc-black);margin-bottom:12px">📝 Submitting an Appreciation Entry</div>
           <div style="display:flex;flex-direction:column;gap:9px">
             <div style="display:flex;gap:14px;align-items:flex-start">
-              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciated To</span>
+              <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciation To</span>
               <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The @accenture.com email of the team member who received the appreciation. No spaces allowed.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
@@ -1510,7 +1541,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Email Subject</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The subject line of the appreciation email (max 150 chars). Used for duplicate detection — two entries with the same subject and same Appreciated To will be blocked.</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The subject line of the appreciation email (max 150 chars). Used for duplicate detection — two entries with the same subject and same 'Appreciation To' will be blocked.</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciation Words</span>
@@ -2052,9 +2083,11 @@ function finishLogin() {
   loadNominationsFromSheet();
   loadAppreciationsFromSheet();
   updateStats();
+  startIdleTracking();   // begin 40s inactivity timeout
 }
 
 function doLogout() {
+  stopIdleTracking();    // clear all timers before wiping state
   currentUser = null;
   nominations = [];
   appreciations = [];
@@ -3002,7 +3035,7 @@ function downloadUsersList() {
 // ══════════════════════════════════════════════════════════════════
 function downloadCAExcel() {
   if (!appreciations.length) { toast('⚠ No appreciation entries to export.', 'warn'); return; }
-  const headers = ['Appreciated To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Status','Approved By'];
+  const headers = ['Appreciation To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Status','Approved By'];
   const rows = appreciations.map(a => {
     const addlMembers = Array.isArray(a.additionalMembers) ? a.additionalMembers.filter(Boolean).join('; ') : '';
     return [
@@ -3024,7 +3057,7 @@ function downloadCAExcel() {
 function downloadCAApprovedExcel() {
   const approved = appreciations.filter(a => a.status === 'approved');
   if (!approved.length) { toast('⚠ No approved appreciation entries to export.', 'warn'); return; }
-  const headers = ['Appreciated To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Approved By'];
+  const headers = ['Appreciation To','Additional Members','Appreciated By','Email Subject','Appreciation Words','Description','Validator','Submitted By','Date','Approved By'];
   const rows = approved.map(a => {
     const addlMembers = Array.isArray(a.additionalMembers) ? a.additionalMembers.filter(Boolean).join('; ') : '';
     return [
@@ -3350,8 +3383,8 @@ async function submitAppreciation() {
   const desc    = document.getElementById('ca-description').value.trim();
   const validator = document.getElementById('ca-validator').value.trim().toLowerCase();
 
-  if (!to) { toast('⚠ Appreciated To is required.', 'warn'); return; }
-  if (!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciated To must be an @accenture.com email.', 'warn'); return; }
+  if (!to) { toast('⚠ Appreciation To is required.', 'warn'); return; }
+  if (!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciation To must be an @accenture.com email.', 'warn'); return; }
   if (!by) { toast('⚠ Appreciated By is required.', 'warn'); return; }
   if (!/^[^\s@]+@(accenture|boi)\.com$/i.test(by)) { toast('⚠ Appreciated By must be @accenture.com or @boi.com.', 'warn'); return; }
   if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
@@ -3371,13 +3404,13 @@ async function submitAppreciation() {
     }
   }
 
-  // Duplicate check: same Email Subject AND same Appreciated To
+  // Duplicate check: same Email Subject AND same Appreciation To
   const dup = appreciations.find(a =>
     a.appreciatedTo.toLowerCase() === to &&
     a.emailSubject.toLowerCase() === subject.toLowerCase()
   );
   if (dup) {
-    toast('⚠ Duplicate entry: An appreciation with the same Email Subject and Appreciated To already exists.', 'warn');
+    toast('⚠ Duplicate entry: An appreciation with the same Email Subject and Appreciation To already exists.', 'warn');
     return;
   }
 
@@ -3637,7 +3670,7 @@ async function saveCAEdit() {
   const desc    = document.getElementById('ca-edit-desc').value.trim();
   const validator = document.getElementById('ca-edit-validator').value.trim().toLowerCase();
 
-  if (!to||!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciated To must be @accenture.com.', 'warn'); return; }
+  if (!to||!/^[^\s@]+@accenture\.com$/i.test(to)) { toast('⚠ Appreciation To must be @accenture.com.', 'warn'); return; }
   if (!by||!/^[^\s@]+@(accenture|boi)\.com$/i.test(by)) { toast('⚠ Appreciated By must be @accenture.com or @boi.com.', 'warn'); return; }
   if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
   if (!words) { toast('⚠ Appreciation Words are required.', 'warn'); return; }
@@ -3654,7 +3687,7 @@ async function saveCAEdit() {
 
   // Duplicate check: same Subject + same To, excluding self
   const dup = appreciations.find(a => a.id !== id && a.appreciatedTo.toLowerCase() === to && a.emailSubject.toLowerCase() === subject.toLowerCase());
-  if (dup) { toast('⚠ Duplicate entry: same Email Subject and Appreciated To already exists.', 'warn'); return; }
+  if (dup) { toast('⚠ Duplicate entry: same Email Subject and Appreciation To already exists.', 'warn'); return; }
 
   const changes = { appreciatedTo:to, appreciatedBy:by, emailSubject:subject, appreciationWords:words, description:desc, validator, additionalMembers };
   await updateAppreciation(id, changes);
@@ -4111,7 +4144,7 @@ updateStats();
     <p>Update the details below. You can only edit your own entries.</p>
     <input type="hidden" id="ca-edit-id" />
     <div class="edit-form-group">
-      <label>Appreciated To <span class="req">*</span></label>
+      <label>Appreciation To <span class="req">*</span></label>
       <input type="email" id="ca-edit-to" maxlength="80" placeholder="email@accenture.com" oninput="this.value=this.value.replace(/\s/g,'')" />
     </div>
     <div class="edit-form-group">
@@ -4171,5 +4204,88 @@ updateStats();
   </div>
 </div>
 
+
+<!-- ═════════════════════ INACTIVITY TIMEOUT MODAL ═════════════════════ -->
+<div id="timeout-modal-backdrop">
+  <div id="timeout-modal">
+    <div class="tm-icon">⏱</div>
+    <h3>Session Expiring Soon</h3>
+    <p>You've been inactive. For security, you'll be logged out automatically in:</p>
+    <div id="timeout-countdown">10</div>
+    <p style="font-size:12px;color:var(--acc-gray-300);margin-bottom:4px">Move your mouse or press any key to stay logged in.</p>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  INACTIVITY TIMEOUT — 40s total (30s idle → 10s warning countdown)
+// ══════════════════════════════════════════════════════════════════
+const IDLE_TIMEOUT_MS   = 30000;   // 30s of inactivity before warning
+const WARNING_DURATION  = 10;      // 10s countdown shown in modal
+
+let _idleTimer       = null;
+let _countdownTimer  = null;
+let _countdownValue  = WARNING_DURATION;
+let _timeoutActive   = false;
+
+const ACTIVITY_EVENTS = ['mousemove','mousedown','keydown','touchstart','scroll','click','wheel'];
+
+function _resetIdleTimer() {
+  if (!currentUser) return;              // only track when logged in
+  if (_timeoutActive) {
+    dismissTimeoutWarning();             // user acted during warning — cancel
+    return;
+  }
+  clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(_showTimeoutWarning, IDLE_TIMEOUT_MS);
+}
+
+function _showTimeoutWarning() {
+  if (!currentUser) return;
+  _timeoutActive = true;
+  _countdownValue = WARNING_DURATION;
+  document.getElementById('timeout-countdown').textContent = _countdownValue;
+  document.getElementById('timeout-countdown').classList.remove('urgent');
+  document.getElementById('timeout-modal-backdrop').classList.add('open');
+  _runCountdown();
+}
+
+function _runCountdown() {
+  _countdownTimer = setInterval(() => {
+    _countdownValue--;
+    const el = document.getElementById('timeout-countdown');
+    el.textContent = _countdownValue;
+    if (_countdownValue <= 3) el.classList.add('urgent');
+    if (_countdownValue <= 0) {
+      clearInterval(_countdownTimer);
+      document.getElementById('timeout-modal-backdrop').classList.remove('open');
+      _timeoutActive = false;
+      doLogout();
+    }
+  }, 1000);
+}
+
+function dismissTimeoutWarning() {
+  clearInterval(_countdownTimer);
+  _countdownTimer = null;
+  _timeoutActive  = false;
+  document.getElementById('timeout-modal-backdrop').classList.remove('open');
+  _resetIdleTimer();   // restart the idle clock
+}
+
+function startIdleTracking() {
+  ACTIVITY_EVENTS.forEach(ev => document.addEventListener(ev, _resetIdleTimer, { passive: true }));
+  _resetIdleTimer();
+}
+
+function stopIdleTracking() {
+  ACTIVITY_EVENTS.forEach(ev => document.removeEventListener(ev, _resetIdleTimer));
+  clearTimeout(_idleTimer);
+  clearInterval(_countdownTimer);
+  _idleTimer      = null;
+  _countdownTimer = null;
+  _timeoutActive  = false;
+}
+</script>
 </body>
 </html>
