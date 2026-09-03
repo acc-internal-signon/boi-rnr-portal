@@ -1142,8 +1142,8 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
             <label>Appreciation Words <span class="req">*</span></label>
             <textarea id="ca-appreciation-words" rows="3" maxlength="300"
               placeholder="Mention what is being written in the appreciation email."
-              oninput="updateCharCountCA('ca-appreciation-words','ca-words-counter',300)"></textarea>
-            <div class="char-counter" id="ca-words-counter">0 / 300 characters</div>
+              oninput="updateCharCountCA('ca-appreciation-words','ca-words-counter',1000)"></textarea>
+            <div class="char-counter" id="ca-words-counter">0 / 1000 characters</div>
           </div>
 
           <!-- Description -->
@@ -1151,8 +1151,8 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
             <label>Description <span class="req">*</span></label>
             <textarea id="ca-description" rows="4" maxlength="800"
               placeholder="Context about WHY the client or stakeholder gave the appreciation - what work, interaction or achievement make this appreciation possible."
-              oninput="updateCharCountCA('ca-description','ca-desc-counter',800)"></textarea>
-            <div class="char-counter" id="ca-desc-counter">0 / 800 characters</div>
+              oninput="updateCharCountCA('ca-description','ca-desc-counter',1500)"></textarea>
+            <div class="char-counter" id="ca-desc-counter">0 / 1500 characters</div>
           </div>
 
           <!-- Validator -->
@@ -1545,11 +1545,11 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Appreciation Words</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The key phrase or sentence actually written about the person in the appreciation email (max 300 chars).</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">The key phrase or sentence actually written about the person in the appreciation email (max 1000 chars).</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Description</span>
-              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Context about why the client or stakeholder gave the appreciation — what work, interaction, or achievement prompted it (max 800 chars).</p>
+              <p style="font-size:13px;color:var(--acc-gray-700);line-height:1.7;margin:0">Context about why the client or stakeholder gave the appreciation — what work, interaction, or achievement prompted it (max 1500 chars).</p>
             </div>
             <div style="display:flex;gap:14px;align-items:flex-start">
               <span style="background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;flex-shrink:0;white-space:nowrap">Validator</span>
@@ -3390,9 +3390,9 @@ async function submitAppreciation() {
   if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
   if (subject.length > 150) { toast('⚠ Email Subject cannot exceed 150 characters.', 'warn'); return; }
   if (!words) { toast('⚠ Appreciation Words are required.', 'warn'); return; }
-  if (words.length > 300) { toast('⚠ Appreciation Words cannot exceed 300 characters.', 'warn'); return; }
+  if (words.length > 300) { toast('⚠ Appreciation Words cannot exceed 1000 characters.', 'warn'); return; }
   if (!desc) { toast('⚠ Description is required.', 'warn'); return; }
-  if (desc.length > 800) { toast('⚠ Description cannot exceed 800 characters.', 'warn'); return; }
+  if (desc.length > 800) { toast('⚠ Description cannot exceed 1500 characters.', 'warn'); return; }
   if (!validator) { toast('⚠ Validator email is required.', 'warn'); return; }
   if (!/^[^\s@]+@accenture\.com$/i.test(validator)) { toast('⚠ Validator must be an @accenture.com email.', 'warn'); return; }
 
@@ -3449,8 +3449,8 @@ function clearCAForm() {
     if (el) el.value = '';
   });
   document.getElementById('ca-subject-counter').textContent = '0 / 150 characters';
-  document.getElementById('ca-words-counter').textContent = '0 / 300 characters';
-  document.getElementById('ca-desc-counter').textContent = '0 / 800 characters';
+  document.getElementById('ca-words-counter').textContent = '0 / 1000 characters';
+  document.getElementById('ca-desc-counter').textContent = '0 / 1500 characters';
   clearCAMemberRows();
   toast('✔ Form cleared.', 'success');
 }
@@ -4220,7 +4220,7 @@ updateStats();
 // ══════════════════════════════════════════════════════════════════
 //  INACTIVITY TIMEOUT — 40s total (30s idle → 10s warning countdown)
 // ══════════════════════════════════════════════════════════════════
-const IDLE_TIMEOUT_MS   = 30000;   // 30s of inactivity before warning
+const IDLE_TIMEOUT_MS   = 300000;   // 30s of inactivity before warning
 const WARNING_DURATION  = 10;      // 10s countdown shown in modal
 
 let _idleTimer       = null;
