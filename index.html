@@ -1140,7 +1140,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
           <!-- Appreciation Words -->
           <div class="form-group span2">
             <label>Appreciation Words <span class="req">*</span></label>
-            <textarea id="ca-appreciation-words" rows="3" maxlength="300"
+            <textarea id="ca-appreciation-words" rows="3" maxlength="1000"
               placeholder="Mention what is being written in the appreciation email."
               oninput="updateCharCountCA('ca-appreciation-words','ca-words-counter',1000)"></textarea>
             <div class="char-counter" id="ca-words-counter">0 / 1000 characters</div>
@@ -1149,7 +1149,7 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
           <!-- Description -->
           <div class="form-group span2">
             <label>Description <span class="req">*</span></label>
-            <textarea id="ca-description" rows="4" maxlength="800"
+            <textarea id="ca-description" rows="4" maxlength="1500"
               placeholder="Context about WHY the client or stakeholder gave the appreciation - what work, interaction or achievement make this appreciation possible."
               oninput="updateCharCountCA('ca-description','ca-desc-counter',1500)"></textarea>
             <div class="char-counter" id="ca-desc-counter">0 / 1500 characters</div>
@@ -3390,9 +3390,9 @@ async function submitAppreciation() {
   if (!subject) { toast('⚠ Email Subject is required.', 'warn'); return; }
   if (subject.length > 150) { toast('⚠ Email Subject cannot exceed 150 characters.', 'warn'); return; }
   if (!words) { toast('⚠ Appreciation Words are required.', 'warn'); return; }
-  if (words.length > 300) { toast('⚠ Appreciation Words cannot exceed 1000 characters.', 'warn'); return; }
+  if (words.length > 1000) { toast('⚠ Appreciation Words cannot exceed 1000 characters.', 'warn'); return; }
   if (!desc) { toast('⚠ Description is required.', 'warn'); return; }
-  if (desc.length > 800) { toast('⚠ Description cannot exceed 1500 characters.', 'warn'); return; }
+  if (desc.length > 1500) { toast('⚠ Description cannot exceed 1500 characters.', 'warn'); return; }
   if (!validator) { toast('⚠ Validator email is required.', 'warn'); return; }
   if (!/^[^\s@]+@accenture\.com$/i.test(validator)) { toast('⚠ Validator must be an @accenture.com email.', 'warn'); return; }
 
@@ -4157,11 +4157,11 @@ updateStats();
     </div>
     <div class="edit-form-group">
       <label>Appreciation Words <span class="req">*</span></label>
-      <textarea id="ca-edit-words" rows="3" maxlength="300"></textarea>
+      <textarea id="ca-edit-words" rows="3" maxlength="1000"></textarea>
     </div>
     <div class="edit-form-group">
       <label>Description <span class="req">*</span></label>
-      <textarea id="ca-edit-desc" rows="4" maxlength="800"></textarea>
+      <textarea id="ca-edit-desc" rows="4" maxlength="1500"></textarea>
     </div>
     <div class="edit-form-group">
       <label>Validator <span class="req">*</span></label>
