@@ -1087,9 +1087,9 @@
               <th><div class="th-inner"><span class="th-label">Nominated By</span><span class="sort-btn-icon" id="sbtn-nominatedby" onclick="toggleSort('nominatedby')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-nominatedby" onclick="toggleFilter(event,'nominatedby')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Date</span><span class="sort-btn-icon" id="sbtn-date" onclick="toggleSort('date')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-date" onclick="toggleFilter(event,'date')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Status</span><span class="sort-btn-icon" id="sbtn-status" onclick="toggleSort('status')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-status" onclick="toggleFilter(event,'status')">▼</span></div></th>
-              <th><div class="th-inner"><span class="th-label">Rank</span><span class="sort-btn-icon" id="sbtn-rank" onclick="toggleSort('rank')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-rank" onclick="toggleFilter(event,'rank')">▼</span></div></th>
-              <th><div class="th-inner"><span class="th-label">Approved Month/Qtr</span><span class="sort-btn-icon" id="sbtn-apperiod" onclick="toggleSort('apperiod')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-apperiod" onclick="toggleFilter(event,'apperiod')">▼</span></div></th>
-              <th><div class="th-inner"><span class="th-label">Approved Year</span><span class="sort-btn-icon" id="sbtn-apyear" onclick="toggleSort('apyear')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-apyear" onclick="toggleFilter(event,'apyear')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">🥇</span><span class="sort-btn-icon" id="sbtn-rank" onclick="toggleSort('rank')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-rank" onclick="toggleFilter(event,'rank')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Month/Qtr</span><span class="sort-btn-icon" id="sbtn-apperiod" onclick="toggleSort('apperiod')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-apperiod" onclick="toggleFilter(event,'apperiod')">▼</span></div></th>
+              <th><div class="th-inner"><span class="th-label">Year</span><span class="sort-btn-icon" id="sbtn-apyear" onclick="toggleSort('apyear')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-apyear" onclick="toggleFilter(event,'apyear')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Action By</span><span class="sort-btn-icon" id="sbtn-actionby" onclick="toggleSort('actionby')" title="Sort">↕</span><span class="filter-btn-icon" id="fbtn-actionby" onclick="toggleFilter(event,'actionby')">▼</span></div></th>
               <th><div class="th-inner"><span class="th-label">Actions</span></div></th>
             </tr>
@@ -3038,6 +3038,18 @@ function clearAllFilters() {
   renderTable();
 }
 
+// Show only the part of an email before the @ (e.g. john.doe@accenture.com → john.doe)
+function shortEmail(e) {
+  const s = String(e || '');
+  const i = s.indexOf('@');
+  return i > 0 ? s.slice(0, i) : s;
+}
+// Limit text to 12 chars, then add ".."
+function truncate12(s) {
+  s = String(s || '');
+  return s.length > 12 ? s.slice(0, 12) + '..' : s;
+}
+
 function renderTable() {
   const q = (document.getElementById('search-input').value || '').toLowerCase();
   let rows = nominations.filter(n => {
@@ -3090,16 +3102,16 @@ function renderTable() {
       <td style="font-weight:500;font-size:11px">${n.categoryLabel}</td>
       <td><span class="nominee-link" onclick="openDetail('${n.id}')">${n.nomineeName}</span>${n.photoData?`<span class="photo-dot" title="Has photo attached">&#9679;</span>`:''}</td>
       <td>${n.team}</td>
-      <td style="font-size:10px;color:var(--acc-gray-500)">${n.subTeam||'—'}</td>
-      <td style="font-size:10px;color:var(--acc-gray-500)">${n.nominatedBy}</td>
+      <td style="font-size:10px;color:var(--acc-gray-500);white-space:nowrap" title="${(n.subTeam||'').replace(/"/g,'&quot;')}">${n.subTeam ? truncate12(n.subTeam) : '—'}</td>
+      <td style="font-size:10px;color:var(--acc-gray-500);white-space:nowrap" title="${n.nominatedBy}">${shortEmail(n.nominatedBy)}</td>
       <td style="font-size:10px;color:var(--acc-gray-500);white-space:nowrap">${formatDateOnly(n.date)}</td>
       <td><span class="badge badge-${n.status==='approved'?'approved':'pending'}">${n.status==='approved'?'✔ Approved':'⏳ Pending'}</span></td>
       <td class="${rankClass}" style="font-size:11px;text-align:center">${rankLabel}</td>
       <td style="font-size:11px;white-space:nowrap;font-weight:600;color:var(--acc-purple)">${isApproved&&approvedPeriodLabel(n)?approvedPeriodLabel(n):'<span style="color:var(--acc-gray-300);font-weight:400">—</span>'}</td>
       <td style="font-size:11px;text-align:center;font-weight:600">${isApproved&&approvedYearLabel(n)?approvedYearLabel(n):'<span style="color:var(--acc-gray-300);font-weight:400">—</span>'}</td>
-      <td style="font-size:10px;white-space:nowrap">
-        ${n.status==='approved'&&n.approvedBy?`<span style="color:#007a5a;font-weight:600">✔ ${n.approvedBy}</span>`:n.removedBy?`<span style="color:var(--acc-red);font-weight:600">✖ ${n.removedBy}</span>`:'<span style="color:var(--acc-gray-300)">—</span>'}
-      </td>
+<td style="font-size:10px;white-space:nowrap">
+  ${n.status==='approved'&&n.approvedBy?`<span style="color:#007a5a;font-weight:600" title="${n.approvedBy}">✔ ${shortEmail(n.approvedBy)}</span>`:n.removedBy?`<span style="color:var(--acc-red);font-weight:600" title="${n.removedBy}">✖ ${shortEmail(n.removedBy)}</span>`:'<span style="color:var(--acc-gray-300)">—</span>'}
+</td>
       <td>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           ${isOwner&&!isApproved?`<button class="btn btn-secondary btn-sm" onclick="openEdit('${n.id}')">✏ Edit</button>`:''}
