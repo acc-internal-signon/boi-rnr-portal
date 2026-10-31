@@ -762,6 +762,55 @@
   .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; }
 
+  /* ── KPI DASHBOARD ── */
+.kpi-filters{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;background:white;border:1px solid var(--acc-gray-200);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow-sm);margin-bottom:20px}
+.kpi-filters .fg{display:flex;flex-direction:column;gap:4px}
+.kpi-filters select{min-width:160px;padding:8px 10px;font-size:13px}
+.kpi-note{font-size:12px;color:var(--acc-gray-500);margin-left:auto;max-width:380px;line-height:1.5}
+.kpi-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.kpi-card{background:white;border:1px solid var(--acc-gray-200);border-left:4px solid var(--acc-purple);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.kpi-card.gold{border-left-color:var(--acc-gold)}.kpi-card.green{border-left-color:var(--acc-green)}.kpi-card.red{border-left-color:var(--acc-red)}.kpi-card.blue{border-left-color:var(--acc-blue)}
+.kpi-ic{font-size:20px}
+.kpi-v{font-family:'Barlow',sans-serif;font-size:30px;font-weight:800;line-height:1.1;margin-top:4px}
+.kpi-l{font-size:12px;font-weight:600;color:var(--acc-gray-700);margin-top:2px}
+.kpi-s{font-size:11px;color:var(--acc-gray-500);margin-top:2px}
+.kpi-section-title{font-family:'Barlow',sans-serif;font-size:17px;font-weight:800;margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr));gap:18px}
+.kpi-panel{background:white;border:1px solid var(--acc-gray-200);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;min-width:0}
+.kpi-panel.full{grid-column:1/-1}
+.kpi-ph{padding:12px 18px;font-family:'Barlow',sans-serif;font-weight:700;font-size:15px;border-bottom:1px solid var(--acc-gray-200);background:linear-gradient(90deg,var(--acc-purple-bg),white)}
+.kpi-ph small{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:11px;color:var(--acc-gray-500);margin-top:2px}
+.kpi-pb{padding:16px 18px;overflow-x:auto;max-height:520px;overflow-y:auto}
+.kpi-empty{text-align:center;color:var(--acc-gray-500);font-size:13px;padding:24px 8px}
+.kpi-bar-row{display:grid;grid-template-columns:150px 1fr 36px;gap:10px;align-items:center;margin-bottom:8px}
+.kpi-bar-l{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-bar-t{background:var(--acc-gray-100);border-radius:6px;height:16px;display:flex;overflow:hidden}
+.kpi-bar-f{background:linear-gradient(90deg,var(--acc-purple),var(--acc-purple-light));height:100%}
+.kpi-bar-f.gold{background:var(--acc-gold)}
+.kpi-bar-v{font-size:12px;font-weight:700;text-align:right}
+.kpi-legend{display:flex;gap:14px;font-size:11px;color:var(--acc-gray-500);margin-bottom:10px;flex-wrap:wrap}
+.kpi-legend i,.kpi-lg i{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:5px}
+.kpi-dn{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.kpi-donut{width:150px;height:150px;border-radius:50%;position:relative;flex-shrink:0}
+.kpi-donut span{position:absolute;inset:30px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow',sans-serif;font-weight:800;font-size:24px}
+.kpi-lg div{font-size:12px;margin:4px 0;display:flex;align-items:center}
+.kpi-trend{display:flex;align-items:flex-end;gap:8px;height:190px}
+.kpi-tc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.kpi-tcb{width:100%;max-width:34px;display:flex;flex-direction:column-reverse;border-radius:4px 4px 0 0;overflow:hidden}
+.kpi-tn{font-size:10px;font-weight:700}
+.kpi-tl{font-size:9px;color:var(--acc-gray-500);margin-top:4px;white-space:nowrap}
+.kpi-pv{width:100%}
+.kpi-pv th.n,.kpi-pv td.n{text-align:center}
+.kpi-pv td.n{font-weight:600}
+.kpi-pv tr.tot td{font-weight:700;background:var(--acc-gray-100)}
+.kpi-chip{display:inline-block;background:var(--acc-purple-bg);color:var(--acc-purple);border-radius:20px;padding:2px 9px;font-size:10px;font-weight:600;margin:1px 3px 1px 0;white-space:nowrap}
+@media print{
+  .topbar,.nav-tabs,.hero-banner,.kpi-filters,.no-print,#toast{display:none!important}
+  body{background:white}.page{padding:0!important}
+  .kpi-panel,.kpi-card{break-inside:avoid;box-shadow:none}
+  .kpi-pb{max-height:none!important;overflow:visible!important}
+}
+
   /* ── RESPONSIVE ── */
   @media (max-width: 700px) {
     .hero-banner { padding: 18px 20px; }
@@ -873,6 +922,7 @@
     <div class="nav-tab" onclick="showTab('star')">⭐ Star of the Month</div>
     <div class="nav-tab" onclick="showTab('submissions')">📋 All Submissions <span class="tab-badge" id="badge-all">0</span></div>
     <div class="nav-tab" onclick="showTab('appreciations')">✨ Client Appreciations <span class="tab-badge" id="badge-appreciations">0</span></div>
+    <div class="nav-tab" onclick="showTab('kpi')">📊 KPI Dashboard</div>
     <div class="nav-tab" onclick="showTab('admin')">⚙ Admin</div>
     <div class="nav-tab" onclick="showTab('howto')">📖 How-To Guide</div>
   </div>
@@ -1256,6 +1306,22 @@ celebrating <strong>legitimate client appreciations</strong> and recognizing the
     </div>
 
   </div><!-- /page-appreciations -->
+
+  <!-- ══ PAGE: KPI DASHBOARD ══ -->
+<div class="page" id="page-kpi">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📊 KPI Dashboard</div>
+      <div class="section-desc">Leadership view of awards, teams, periods, repeat nominees and winners, and client appreciations</div>
+    </div>
+    <div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="kpiRefresh()">🔄 Refresh Data</button>
+      <button class="btn btn-secondary" onclick="kpiExport()">⬇ Download KPI Pack (CSV)</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print / Save PDF</button>
+    </div>
+  </div>
+  <div id="kpi-body"></div>
+</div>
 
   <!-- ══ PAGE: ADMIN ══ -->
   <div class="page" id="page-admin">
@@ -2536,13 +2602,14 @@ async function removeUser(email) {
 // ══════════════════════════════════════════════════════════════════
 function showTab(tab) {
   document.querySelectorAll('.nav-tab').forEach((t,i) => {
-    const tabs = ['quarterly','star','submissions','appreciations','admin','howto'];
+    const tabs = ['quarterly','star','submissions','appreciations','kpi','admin','howto'];
     t.classList.toggle('active', tabs[i] === tab);
   });
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
   if (tab === 'submissions') renderTable();
   if (tab === 'appreciations') renderCATable();
+  if (tab === 'kpi') renderKPI();
   if (tab === 'admin') {
     const isAdmin = currentUser && currentUser.role === 'admin';
     document.getElementById('admin-locked-msg').style.display = isAdmin ? 'none' : 'block';
@@ -4717,5 +4784,290 @@ function stopIdleTracking() {
   ['removeUser',           'Removing user…',                'Removing…', true]   // row button: overlay only
 ].forEach(([fn, msg, label, noBtn]) => busyWrap(fn, msg, label, noBtn));
 </script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  KPI DASHBOARD
+// ══════════════════════════════════════════════════════════════════
+const kpiF = { scope: 'approved', year: 'all', type: 'all' };
+let kpiLast = [];   // sections registered while rendering, used by CSV export
+const KPI_COL = ['#A100FF','#0041F0','#00C48C','#F5A623','#FF3B3B','#7800C4','#C850FF','#888888','#2ec4b6','#0D0D0D'];
+const kE = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+// ---------- date / period helpers ----------
+function kpiDate(o) {
+  const d = new Date(o.date);
+  if (!isNaN(d.getTime())) return d;
+  const p = submittedParts(o);
+  return new Date(p.y, p.m, 1);
+}
+function kpiYear(n) {
+  const p = submittedParts(n);
+  return String(n.status === 'approved' && n.approvedYear ? n.approvedYear : p.y);
+}
+function kpiPeriod(n) {
+  const p = submittedParts(n);
+  if (n.type === 'quarterly') return n.approvedQuarter || (APPROVE_QUARTERS.find(q => q.months.includes(p.m)) || APPROVE_QUARTERS[0]).code;
+  return n.approvedMonth || APPROVE_MONTHS[p.m];
+}
+function kpiPeriodLabel(n) { return n.type === 'quarterly' ? quarterLabel(kpiPeriod(n)) : kpiPeriod(n); }
+function kpiPeriodIdx(n) {
+  return n.type === 'quarterly' ? APPROVE_QUARTERS.findIndex(q => q.code === kpiPeriod(n)) : APPROVE_MONTHS.indexOf(kpiPeriod(n));
+}
+
+// ---------- data helpers ----------
+function kpiPeople(n) {
+  const arr = [{ email: (n.nomineeEmail || '').toLowerCase(), name: n.nomineeName }];
+  if (Array.isArray(n.teamMembers)) n.teamMembers.forEach(m => { if (m && m.email) arr.push({ email: m.email.toLowerCase(), name: m.name || m.email }); });
+  return arr;
+}
+function kpiAgg(list) {
+  const m = new Map();
+  list.forEach(n => kpiPeople(n).forEach(p => {
+    if (!p.email) return;
+    let o = m.get(p.email);
+    if (!o) { o = { email: p.email, name: p.name, team: n.team || '—', count: 0, appr: 0, cats: new Set(), items: [] }; m.set(p.email, o); }
+    o.count++; if (n.status === 'approved') o.appr++;
+    o.cats.add(n.categoryLabel || n.category); o.items.push(n);
+  }));
+  return [...m.values()];
+}
+function kpiCount(list, fn) {
+  const m = new Map();
+  list.forEach(x => { const k = fn(x); m.set(k, (m.get(k) || 0) + 1); });
+  return [...m.entries()].sort((a, b) => b[1] - a[1]);
+}
+
+// ---------- widgets ----------
+const kpiEmpty = () => '<div class="kpi-empty">No data for the selected filters.</div>';
+
+function kpiBars(title, entries, n) {
+  entries = entries.slice(0, n || 10);
+  kpiLast.push({ title, headers: ['Item', 'Count'], rows: entries.map(e => [e[0], e[1]]) });
+  if (!entries.length) return kpiEmpty();
+  const max = Math.max(...entries.map(e => e[1]), 1);
+  return entries.map(([k, v]) => `<div class="kpi-bar-row"><div class="kpi-bar-l" title="${kE(k)}">${kE(k)}</div><div class="kpi-bar-t"><div class="kpi-bar-f" style="width:${(v / max * 100).toFixed(1)}%"></div></div><div class="kpi-bar-v">${v}</div></div>`).join('');
+}
+
+function kpiStack(title, rows) {   // rows: [label, approved, pending]
+  kpiLast.push({ title, headers: ['Team', 'Approved', 'Pending', 'Total'], rows: rows.map(r => [r[0], r[1], r[2], r[1] + r[2]]) });
+  if (!rows.length) return kpiEmpty();
+  const max = Math.max(...rows.map(r => r[1] + r[2]), 1);
+  return `<div class="kpi-legend"><span><i style="background:var(--acc-purple)"></i>Approved</span><span><i style="background:var(--acc-gold)"></i>Pending</span></div>` +
+    rows.map(([k, a, p]) => `<div class="kpi-bar-row"><div class="kpi-bar-l" title="${kE(k)}">${kE(k)}</div><div class="kpi-bar-t"><div class="kpi-bar-f" style="width:${(a / max * 100).toFixed(1)}%"></div><div class="kpi-bar-f gold" style="width:${(p / max * 100).toFixed(1)}%"></div></div><div class="kpi-bar-v">${a + p}</div></div>`).join('');
+}
+
+function kpiDonut(title, entries) {
+  kpiLast.push({ title, headers: ['Item', 'Count'], rows: entries.map(e => [e[0], e[1]]) });
+  const total = entries.reduce((s, e) => s + e[1], 0);
+  if (!total) return kpiEmpty();
+  let acc = 0;
+  const segs = entries.map(([k, v], i) => { const s = acc / total * 100; acc += v; return `${KPI_COL[i % KPI_COL.length]} ${s.toFixed(2)}% ${(acc / total * 100).toFixed(2)}%`; }).join(',');
+  return `<div class="kpi-dn"><div class="kpi-donut" style="background:conic-gradient(${segs})"><span>${total}</span></div><div class="kpi-lg">${entries.map(([k, v], i) => `<div><i style="background:${KPI_COL[i % KPI_COL.length]}"></i>${kE(k)} — <b style="margin-left:4px">${v}</b> (${Math.round(v / total * 100)}%)</div>`).join('')}</div></div>`;
+}
+
+function kpiTrend(title, list) {   // last 12 calendar months by submission date
+  const now = new Date(), ms = [];
+  for (let i = 11; i >= 0; i--) { const d = new Date(now.getFullYear(), now.getMonth() - i, 1); ms.push({ y: d.getFullYear(), m: d.getMonth(), a: 0, p: 0 }); }
+  list.forEach(n => {
+    const d = kpiDate(n), t = ms.find(x => x.y === d.getFullYear() && x.m === d.getMonth());
+    if (t) { if (n.status === 'approved') t.a++; else t.p++; }
+  });
+  kpiLast.push({ title, headers: ['Month', 'Approved', 'Pending'], rows: ms.map(x => [APPROVE_MONTHS[x.m] + ' ' + x.y, x.a, x.p]) });
+  const max = Math.max(...ms.map(x => x.a + x.p), 1);
+  return `<div class="kpi-legend"><span><i style="background:var(--acc-purple)"></i>Approved</span><span><i style="background:var(--acc-gold)"></i>Pending</span></div>
+  <div class="kpi-trend">${ms.map(x => `<div class="kpi-tc" title="${APPROVE_MONTHS[x.m]} ${x.y}: ${x.a} approved, ${x.p} pending"><div class="kpi-tn">${x.a + x.p || ''}</div><div class="kpi-tcb"><div style="height:${x.a / max * 130}px;background:var(--acc-purple)"></div><div style="height:${x.p / max * 130}px;background:var(--acc-gold)"></div></div><div class="kpi-tl">${APPROVE_MONTHS[x.m]} ${String(x.y).slice(2)}</div></div>`).join('')}</div>`;
+}
+
+function kpiTable(title, headers, rows) {   // cells: plain value or {h:html, t:plainText}
+  kpiLast.push({ title, headers, rows: rows.map(r => r.map(c => c && typeof c === 'object' ? c.t : c)) });
+  if (!rows.length) return kpiEmpty();
+  return `<table class="kpi-pv"><thead><tr>${headers.map(h => `<th>${kE(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c && typeof c === 'object' ? c.h : kE(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+
+function kpiPivot(title, list, rowFn, colFn, cols, colLabel, rowHead) {
+  const m = new Map();
+  list.forEach(n => { const r = rowFn(n), c = colFn(n); if (!m.has(r)) m.set(r, {}); m.get(r)[c] = (m.get(r)[c] || 0) + 1; });
+  const rows = [...m.entries()].map(([r, o]) => ({ r, o, tot: cols.reduce((s, c) => s + (o[c] || 0), 0) })).sort((a, b) => b.tot - a.tot);
+  const colTot = cols.map(c => rows.reduce((s, x) => s + (x.o[c] || 0), 0));
+  const headers = [rowHead, ...cols.map(colLabel), 'Total'];
+  kpiLast.push({ title, headers, rows: [...rows.map(x => [x.r, ...cols.map(c => x.o[c] || 0), x.tot]), ['Total', ...colTot, colTot.reduce((a, b) => a + b, 0)]] });
+  if (!rows.length) return kpiEmpty();
+  let max = 1; rows.forEach(x => cols.forEach(c => { if ((x.o[c] || 0) > max) max = x.o[c]; }));
+  const heat = v => v ? `background:rgba(161,0,255,${(0.10 + 0.55 * v / max).toFixed(2)});${v / max > 0.6 ? 'color:white;' : ''}` : 'color:var(--acc-gray-300)';
+  return `<table class="kpi-pv"><thead><tr><th>${kE(rowHead)}</th>${cols.map(c => `<th class="n">${kE(colLabel(c))}</th>`).join('')}<th class="n">Total</th></tr></thead><tbody>` +
+    rows.map(x => `<tr><td style="font-weight:600">${kE(x.r)}</td>${cols.map(c => `<td class="n" style="${heat(x.o[c] || 0)}">${x.o[c] || '·'}</td>`).join('')}<td class="n">${x.tot}</td></tr>`).join('') +
+    `<tr class="tot"><td>Total</td>${colTot.map(v => `<td class="n">${v}</td>`).join('')}<td class="n">${colTot.reduce((a, b) => a + b, 0)}</td></tr></tbody></table>`;
+}
+
+const kpiPanel = (title, sub, inner, full) => `<div class="kpi-panel${full ? ' full' : ''}"><div class="kpi-ph">${title}${sub ? `<small>${sub}</small>` : ''}</div><div class="kpi-pb">${inner}</div></div>`;
+const kpiCard = (ic, v, l, s, cls) => `<div class="kpi-card ${cls || ''}"><div class="kpi-ic">${ic}</div><div class="kpi-v">${v}</div><div class="kpi-l">${l}</div><div class="kpi-s">${s || '&nbsp;'}</div></div>`;
+
+// ---------- filter handlers ----------
+function kpiSetF(k, v) { kpiF[k] = v; renderKPI(); }
+async function kpiRefresh() {
+  toast('🔄 Refreshing…', 'info');
+  await Promise.all([loadNominationsFromSheet(), loadAppreciationsFromSheet()]);
+  renderKPI();
+  toast('✅ KPI data refreshed.', 'success');
+}
+function kpiExport() {
+  if (!kpiLast.length) { toast('⚠ Nothing to export.', 'warn'); return; }
+  const q = c => '"' + String(c == null ? '' : c).replace(/"/g, '""') + '"';
+  const lines = [];
+  kpiLast.forEach(s => { lines.push(q(s.title)); lines.push(s.headers.map(q).join(',')); s.rows.forEach(r => lines.push(r.map(q).join(','))); lines.push(''); });
+  const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = 'RnR_KPI_Pack_' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  toast('⬇ KPI pack downloaded.', 'success');
+}
+
+// ---------- main render ----------
+function renderKPI() {
+  const host = document.getElementById('kpi-body');
+  if (!host || !currentUser) return;
+  kpiLast = [];
+
+  // filters
+  const yrs = new Set();
+  nominations.forEach(n => yrs.add(kpiYear(n)));
+  appreciations.forEach(a => yrs.add(String(submittedParts(a).y)));
+  const yearOpts = [['all', 'All years'], ...[...yrs].sort((a, b) => b - a).map(y => [y, y])];
+  const sel = (k, opts) => `<select onchange="kpiSetF('${k}',this.value)">${opts.map(o => `<option value="${o[0]}"${kpiF[k] === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select>`;
+  const filtersHtml = `<div class="kpi-filters no-print">
+    <div class="fg"><label>Year</label>${sel('year', yearOpts)}</div>
+    <div class="fg"><label>Award Type</label>${sel('type', [['all', 'Quarterly + Star of the Month'], ['quarterly', 'Quarterly only'], ['star', 'Star of the Month only']])}</div>
+    <div class="fg"><label>Count</label>${sel('scope', [['approved', 'Approved awards only'], ['all', 'All nominations (incl. pending)']])}</div>
+    <div class="kpi-note">Year = approved year for approved records, submission year otherwise. Month/Quarter panels always use the <b>approved</b> period. Team Awards count every member as a person in repeat/winner stats.</div>
+  </div>`;
+
+  // datasets
+  const typeOk = n => kpiF.type === 'all' || n.type === kpiF.type;
+  const all = nominations.filter(n => typeOk(n) && (kpiF.year === 'all' || kpiYear(n) === kpiF.year));
+  const appr = all.filter(n => n.status === 'approved');
+  const pend = all.filter(n => n.status !== 'approved');
+  const base = kpiF.scope === 'approved' ? appr : all;
+
+  const nomAgg = kpiAgg(all), winAgg = kpiAgg(appr);
+  const repeatWinners = winAgg.filter(p => p.appr >= 2).sort((a, b) => b.appr - a.appr);
+  const cut = new Date(); cut.setMonth(cut.getMonth() - 6);
+  const recent = nominations.filter(n => typeOk(n) && kpiDate(n) >= cut);
+  const repeat6 = kpiAgg(recent).filter(p => p.count >= 2).sort((a, b) => b.count - a.count);
+  const pend30 = pend.filter(n => (Date.now() - kpiDate(n).getTime()) / 864e5 > 30).length;
+  const selfNom = all.filter(n => n.nominatedBy && n.nominatedBy.toLowerCase() === (n.nomineeEmail || '').toLowerCase()).length;
+  const nominators = new Set(all.map(n => n.nominatedBy)).size;
+  const teamsAwarded = new Set(appr.map(n => n.team || '—')).size;
+
+  const aList = appreciations.filter(a => kpiF.year === 'all' || String(submittedParts(a).y) === kpiF.year);
+  const aAppr = aList.filter(a => a.status === 'approved');
+  const aBase = kpiF.scope === 'approved' ? aAppr : aList;
+
+  // ---- KPI cards ----
+  const cards = [
+    kpiCard('📨', all.length, 'Total Nominations', `${nomAgg.length} unique nominees`),
+    kpiCard('🏆', appr.length, 'Approved Awards', `${winAgg.length} unique winners`, 'green'),
+    kpiCard('📈', (all.length ? Math.round(appr.length / all.length * 100) : 0) + '%', 'Approval Rate', `${appr.length} of ${all.length}`, 'blue'),
+    kpiCard('🏢', teamsAwarded, 'Teams With Awards', 'distinct teams in approved awards'),
+    kpiCard('🔁', repeatWinners.length, 'Repeat Winners', 'approved 2+ times in selection', 'gold'),
+    kpiCard('🔂', repeat6.length, 'Repeat Nominees (6 mo)', '2+ nominations, last 6 months', 'gold'),
+    //kpiCard('⏳', pend.length, 'Pending Review', `${pend30} pending for 30+ days`, pend30 ? 'red' : ''),
+    kpiCard('🙋', selfNom, 'Self-Nominations', 'nominator = nominee'),
+    kpiCard('👥', nominators, 'Unique Nominators', 'people who submitted nominations'),
+    kpiCard('✨', `${aAppr.length}/${aList.length}`, 'Client Appreciations', 'approved / total', 'green')
+  ].join('');
+
+  const P = [];
+
+  // ---- Teams ----
+  const tm = new Map();
+  all.forEach(n => { const t = n.team || '—', o = tm.get(t) || { a: 0, p: 0 }; if (n.status === 'approved') o.a++; else o.p++; tm.set(t, o); });
+  const teamRows = [...tm.entries()].map(([t, o]) => [t, o.a, o.p]).sort((a, b) => (b[1] + b[2]) - (a[1] + a[2]));
+  P.push(kpiPanel('🏢 Awards by Team', 'Approved vs pending nominations per team', kpiStack('Awards by Team', teamRows)));
+  P.push(kpiPanel('🥧 Team Share', kpiF.scope === 'approved' ? 'Share of approved awards' : 'Share of all nominations', kpiDonut('Team Share', kpiCount(base, n => n.team || '—'))));
+  P.push(kpiPanel('🏷 Awards by Category', 'Quarterly categories and Star of the Month', kpiBars('Awards by Category', kpiCount(base, n => n.categoryLabel || n.category), 12)));
+  P.push(kpiPanel('📅 Nomination Trend — Last 12 Months', 'By submission date', kpiTrend('Nomination Trend (12 months)', nominations.filter(typeOk))));
+
+  // ---- Team → Sub Team ----
+  const st = new Map();
+  base.forEach(n => {
+    const t = n.team || '—';
+    if (!st.has(t)) st.set(t, { q: 0, s: 0, subs: new Map() });
+    const T = st.get(t), key = (n.subTeam || '').trim().toLowerCase() || '(not specified)';
+    if (!T.subs.has(key)) T.subs.set(key, { label: (n.subTeam || '').trim() || '(not specified)', q: 0, s: 0 });
+    const S = T.subs.get(key);
+    if (n.type === 'quarterly') { T.q++; S.q++; } else { T.s++; S.s++; }
+  });
+  const stRows = [];
+  [...st.entries()].sort((a, b) => (b[1].q + b[1].s) - (a[1].q + a[1].s)).forEach(([t, T]) => {
+    stRows.push([{ h: `<strong>${kE(t)}</strong>`, t: t }, T.q, T.s, T.q + T.s]);
+    [...T.subs.values()].sort((a, b) => (b.q + b.s) - (a.q + a.s)).forEach(S => stRows.push([{ h: `<span style="padding-left:18px;color:var(--acc-gray-700)">↳ ${kE(S.label)}</span>`, t: t + ' / ' + S.label }, S.q, S.s, S.q + S.s]));
+  });
+  P.push(kpiPanel('🧩 Team → Sub Team Breakdown', 'Which sub team inside each team earned the awards', kpiTable('Team to Sub Team', ['Team / Sub Team', 'Quarterly', 'Star of the Month', 'Total'], stRows), true));
+
+  // ---- Awards calendar ----
+  const cal = new Map();
+  appr.forEach(n => {
+    const k = [kpiYear(n), n.type, kpiPeriodIdx(n)].join('|');
+    if (!cal.has(k)) cal.set(k, { y: kpiYear(n), t: n.type, label: kpiPeriodLabel(n), idx: kpiPeriodIdx(n), list: [] });
+    cal.get(k).list.push(n);
+  });
+  const calRows = [...cal.values()].sort((a, b) => (b.y - a.y) || (a.t === b.t ? 0 : (a.t === 'quarterly' ? -1 : 1)) || (b.idx - a.idx)).map(c => {
+    const tc = kpiCount(c.list, n => n.team || '—');
+    const names = c.list.map(n => n.nomineeName + (n.category === 'team_award' && Array.isArray(n.teamMembers) && n.teamMembers.length ? ` +${n.teamMembers.length}` : ''));
+    const shown = names.slice(0, 11).join(', ') + (names.length > 11 ? ` +${names.length - 11} more` : '');
+    return [c.y, c.t === 'quarterly' ? 'Quarterly' : 'Star of the Month', c.label, c.list.length,
+      { h: tc.map(([t, v]) => `<span class="kpi-chip">${kE(t)} · ${v}</span>`).join(''), t: tc.map(([t, v]) => `${t} (${v})`).join('; ') }, shown];
+  });
+  P.push(kpiPanel('🗓 Awards Calendar — Approved Period × Teams', 'For every approved Month / Quarter: how many awards, which teams, which winners', kpiTable('Awards Calendar', ['Year', 'Type', 'Period', 'Awards', 'Teams Awarded', 'Winners'], calRows), true));
+
+  // ---- Pivots ----
+  const yrNote = kpiF.year === 'all' ? 'all years combined' : kpiF.year;
+  P.push(kpiPanel('⭐ Pivot — Star of the Month: Team × Month', 'Approved awards, ' + yrNote,
+    kpiPivot('Pivot Star of the Month Team x Month', appr.filter(n => n.type === 'star'), n => n.team || '—', kpiPeriod, APPROVE_MONTHS, c => c, 'Team'), true));
+  P.push(kpiPanel('🏆 Pivot — Quarterly Awards: Team × Quarter', 'Approved awards, ' + yrNote,
+    kpiPivot('Pivot Quarterly Team x Quarter', appr.filter(n => n.type === 'quarterly'), n => n.team || '—', kpiPeriod, APPROVE_QUARTERS.map(q => q.code), quarterLabel, 'Team'), true));
+  const qBase = base.filter(n => n.type === 'quarterly');
+  const teamCols = [...new Set(qBase.map(n => n.team || '—'))].sort();
+  P.push(kpiPanel('🎯 Pivot — Quarterly Category × Team', kpiF.scope === 'approved' ? 'Approved awards' : 'All nominations',
+    kpiPivot('Pivot Category x Team', qBase, n => n.categoryLabel || n.category, n => n.team || '—', teamCols, c => c, 'Category'), true));
+
+  // ---- Repeat nominees / top nominated ----
+  const rn = repeat6.map(p => [p.name, p.email, p.team, p.count, p.appr, [...p.cats].join(', ')]);
+  P.push(kpiPanel('🔂 Nominated 2+ Times in Last 6 Months', 'All statuses, by submission date (' + cut.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' → today)',
+    kpiTable('Repeat Nominees (6 months)', ['Nominee', 'Email', 'Team', 'Nominations', 'Approved', 'Categories'], rn)));
+  P.push(kpiPanel('📣 Most Nominated People', 'Highest nomination counters in the selection', kpiBars('Most Nominated People', nomAgg.sort((a, b) => b.count - a.count).map(p => [p.name, p.count]), 10)));
+
+  // ---- Repeat winners / hall of fame ----
+  const rw = repeatWinners.map(p => [p.name, p.email, p.team, p.appr, p.items.filter(n => n.status === 'approved').map(n => `${n.categoryLabel} – ${kpiPeriodLabel(n)} ${kpiYear(n)}`).join('; ')]);
+  P.push(kpiPanel('🔁 Repeat Winners', 'People with 2 or more approved awards in the selection', kpiTable('Repeat Winners', ['Winner', 'Email', 'Team', 'Awards Won', 'Which awards'], rw)));
+  P.push(kpiPanel('🌟 Hall of Fame — Most Awards', 'Top winners by approved awards', kpiBars('Hall of Fame', winAgg.slice().sort((a, b) => b.appr - a.appr).map(p => [p.name, p.appr]), 10)));
+
+  // ---- Podium ----
+  const pod = appr.filter(n => [1, 2, 3].includes(Number(n.rank)))
+    .sort((a, b) => (kpiYear(b) - kpiYear(a)) || (a.type === b.type ? 0 : (a.type === 'quarterly' ? -1 : 1)) || (kpiPeriodIdx(b) - kpiPeriodIdx(a)) || (a.rank - b.rank))
+    .map(n => [{ h: ({ 1: '🥇', 2: '🥈', 3: '🥉' })[Number(n.rank)] + ' #' + n.rank, t: '#' + n.rank }, n.nomineeName, n.team || '—', n.subTeam || '—', n.categoryLabel, kpiPeriodLabel(n), kpiYear(n)]);
+  P.push(kpiPanel('🥇 Podium — Rank 1 / 2 / 3', 'Ranked approved awards', kpiTable('Podium', ['Rank', 'Nominee', 'Team', 'Sub Team', 'Category', 'Period', 'Year'], pod), true));
+
+  // ---- Engagement ----
+  P.push(kpiPanel('🙌 Top Nominators', 'Who recognises colleagues the most', kpiBars('Top Nominators', kpiCount(all, n => shortEmail(n.nominatedBy)), 10)));
+  P.push(kpiPanel('🧭 Approval Pipeline', 'Status of nominations in the selection', kpiDonut('Approval Pipeline', [['Approved', appr.length], ['Pending', pend.length]].filter(e => e[1]))));
+
+  // ---- Client appreciations ----
+  const apCount = new Map();
+  aBase.forEach(a => [a.appreciatedTo, ...(Array.isArray(a.additionalMembers) ? a.additionalMembers : [])].filter(Boolean).forEach(e => { e = e.toLowerCase(); apCount.set(e, (apCount.get(e) || 0) + 1); }));
+  P.push(kpiPanel('✨ Most Appreciated by Clients', kpiF.scope === 'approved' ? 'Approved appreciations' : 'All appreciations', kpiBars('Most Appreciated', [...apCount.entries()].sort((a, b) => b[1] - a[1]).map(([e, v]) => [shortEmail(e), v]), 10)));
+  P.push(kpiPanel('🤝 Appreciation Source', 'Client (@boi.com) vs internal (@accenture.com)', kpiDonut('Appreciation Source', kpiCount(aBase, a => /@boi\.com$/i.test(a.appreciatedBy || '') ? 'Client (@boi.com)' : 'Internal (@accenture.com)'))));
+  P.push(kpiPanel('📈 Client Appreciation Trend — Last 12 Months', 'By submission date', kpiTrend('Client Appreciation Trend (12 months)', appreciations), true));
+
+  const dbl = winAgg.filter(p => apCount.has(p.email)).sort((a, b) => (b.appr + apCount.get(b.email)) - (a.appr + apCount.get(a.email)))
+    .map(p => [p.name, p.email, p.team, p.appr, apCount.get(p.email)]);
+  P.push(kpiPanel('💎 Double Recognition', 'Award winners who also received client appreciation', kpiTable('Double Recognition', ['Name', 'Email', 'Team', 'Awards Won', 'Client Appreciations'], dbl), true));
+
+  host.innerHTML = filtersHtml + `<div class="kpi-cards">${cards}</div><div class="kpi-grid">${P.join('')}</div>`;
+}
+</script>
+
+
 </body>
 </html>
